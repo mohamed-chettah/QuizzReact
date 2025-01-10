@@ -4,7 +4,7 @@ import axios from 'axios';
 // Définition du type pour le contexte
 interface AuthContextType {
     isAuthenticated: boolean;
-    login: (email: string, password: string) => Promise<void>;
+    login: (userDatas: ILoginUserInput) => Promise<void>;
     logout: () => void;
     registerUser: (userDatas: IRegisterUserInput) => Promise<void>;
 }
@@ -13,6 +13,11 @@ interface IRegisterUserInput {
     firstname: string;
     lastname: string;
     username: string;
+    email: string;
+    password: string;
+}
+
+interface ILoginUserInput {
     email: string;
     password: string;
 }
@@ -37,8 +42,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            // On peut ajouter une logique pour vérifier si le token est encore valide
-            // Par exemple, appeler une API pour valider le token
             setIsAuthenticated(true);
         } else {
             setIsAuthenticated(false);
@@ -46,12 +49,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }, []); // [] assure que cela ne se produira qu'au premier rendu
 
     // Fonction pour le login
-    const login = async (email: string, password: string) => {
+    const login = async (userDatas: ILoginUserInput) => {
         try {
-            const response = await axios.post('http://localhost:3000/login', {
-                email,
-                password
-            });
+            const response = await axios.post('http://localhost:3000/login', userDatas );
 
             if (response.data.error) {
                 throw new Error(response.data.error); // Lever une erreur avec le message du serveur
@@ -66,7 +66,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 localStorage.setItem('token', token);
                 localStorage.setItem('username', username);
                 localStorage.setItem('id', id);
-
                 setIsAuthenticated(true);
             } else {
                 throw new Error("Invalid response from server");

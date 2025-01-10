@@ -5,15 +5,15 @@ import DarkModeToggle from "../DarkToggle.tsx";
 import {NavLink} from "react-router-dom";
 
 const navigation = [
-    { name: 'Connexion', href: 'login'},
-    { name: 'Inscription', href: 'register'},
+    { name: 'Accueil', href: 'home'},
+    { name: 'Jouer', href: 'dashboard'},
 ]
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function NavbarGuest() {
+export default function NavbarAuth() {
     return (
         <Disclosure as="nav" className="bg-white dark:bg-slate-900 border-[1px] dark:border-white border-black">
             {({ open }) => (
@@ -62,6 +62,7 @@ export default function NavbarGuest() {
                             {navigation.map((item) => (
                                 <NavLink
                                     key={item.name}
+                                    as="a"
                                     className={({ isActive }) =>
                                         isActive ? "bg-gray-900 dark:text-white text-black" : "dark:text-white text-black hover:bg-gray-700 hover:text-white',\n" +
                                             "                                        'block rounded-md px-3 py-2 text-base font-medium"

@@ -98,6 +98,7 @@ export async function loginUser(userDatas, app) {
 	if (!userDatas) {
 		return {error: "Aucune donnée n'a été envoyée"};
 	}
+
 	const {email, password} = userDatas;
 	if (!email || !password) {
 		return {error: "Tous les champs sont obligatoires"};
