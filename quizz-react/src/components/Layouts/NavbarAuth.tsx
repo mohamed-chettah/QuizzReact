@@ -2,10 +2,11 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import DarkModeToggle from "../DarkToggle.tsx";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
+import {useAuth} from "../../context/AuthContext.tsx";
 
 const navigation = [
-    { name: 'Accueil', href: 'home'},
+    { name: 'Accueil', href: '/'},
     { name: 'Jouer', href: 'dashboard'},
 ]
 
@@ -14,6 +15,14 @@ function classNames(...classes) {
 }
 
 export default function NavbarAuth() {
+    const {logout} = useAuth();
+    const navigate = useNavigate()
+    function logoutUser(){
+        logout();
+        navigate('/');
+    }
+
+
     return (
         <Disclosure as="nav" className="bg-white dark:bg-slate-900 border-[1px] dark:border-white border-black">
             {({ open }) => (
@@ -51,8 +60,14 @@ export default function NavbarAuth() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="bg-white dark:bg-slate-900">
-                                <DarkModeToggle />
+                            <div className="flex gap-2 items-center bg-white dark:bg-slate-900">
+                                <button
+                                    className="text-sm bg-red-200"
+                                    onClick={logoutUser}
+                                >
+                                    Déconnexion
+                                </button>
+                                <DarkModeToggle/>
                             </div>
                         </div>
                     </div>
@@ -62,7 +77,6 @@ export default function NavbarAuth() {
                             {navigation.map((item) => (
                                 <NavLink
                                     key={item.name}
-                                    as="a"
                                     className={({ isActive }) =>
                                         isActive ? "bg-gray-900 dark:text-white text-black" : "dark:text-white text-black hover:bg-gray-700 hover:text-white',\n" +
                                             "                                        'block rounded-md px-3 py-2 text-base font-medium"

@@ -1,10 +1,12 @@
 
 import './App.css'
-import {createBrowserRouter, Route, Router, RouterProvider, Routes} from "react-router-dom";
+import {createBrowserRouter, Navigate, Route, Router, RouterProvider, Routes} from "react-router-dom";
 import Login from "./components/Form/Login";
 import Register from "./components/Form/Register.tsx";
 import Layout from "./components/Layouts/Layout.tsx";
-import {AuthProvider} from "./context/AuthContext.tsx";
+import Dashboard from "./components/Dashboard.tsx";
+import {AuthProvider, useAuth} from "./context/AuthContext.tsx";
+import Home from "./components/Home.tsx";
 
 function App() {
     const router = createBrowserRouter([
@@ -12,10 +14,10 @@ function App() {
             path: '/',
             element: <Layout />,
             children: [
-                // { path: "/", element: <Header text="Home" /> },
+                { path: "/", element: <Home /> },
                 { path: "/register", element: <Register /> },
                 { path: "/login", element: <Login /> },
-                // { path: "/dashboard", element: <ProtectedRoute component={<Dashboard />} /> },
+                { path: "/dashboard", element: <ProtectedRoute component={<Dashboard />} /> },
                 // { path: "/game/:id", element: <ProtectedRoute component={<Game />} /> },
             ],
         },
@@ -28,10 +30,9 @@ function App() {
     );
 }
 
-// function ProtectedRoute({ component }) {
-//     const { isAuthenticated } = useAuth();
-//     return isAuthenticated ? component : <Navigate to="/login" />;
-// }
-
+function ProtectedRoute({ component }) {
+    const { isAuthenticated } = useAuth();
+    return isAuthenticated ? component : <Navigate to="/login" />;
+}
 
 export default App

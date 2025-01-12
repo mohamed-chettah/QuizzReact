@@ -5,6 +5,7 @@ import DarkModeToggle from "../DarkToggle.tsx";
 import {NavLink} from "react-router-dom";
 
 const navigation = [
+    { name: 'Accueil', href: '/'},
     { name: 'Connexion', href: 'login'},
     { name: 'Inscription', href: 'register'},
 ]

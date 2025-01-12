@@ -33,6 +33,7 @@ export default function Register() {
             // Appel à la fonction d'enregistrement depuis le contexte
             await registerUser(data);
             setError(null)
+            alert("Inscription réussie")
             navigate('/login'); // Redirection vers la page d'accueil après inscription
         } catch (err) {
             setError("Inscription echoué " + err.message);
