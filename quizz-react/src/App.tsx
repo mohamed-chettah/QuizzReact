@@ -6,6 +6,7 @@ import Register from "./components/Form/Register.tsx";
 import Layout from "./components/Layouts/Layout.tsx";
 import Dashboard from "./components/Dashboard.tsx";
 import {AuthProvider, useAuth} from "./context/AuthContext.tsx";
+import {SocketProvider} from "./context/SocketContext.tsx";
 import Home from "./components/Home.tsx";
 
 function App() {

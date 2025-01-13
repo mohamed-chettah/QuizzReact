@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 
 // Créer le contexte
@@ -14,14 +14,11 @@ export const SocketProvider = ({ children }) => {
     const [socket, setSocket] = useState(null);
 
     useEffect(() => {
-        // Initialiser le socket uniquement une fois lors du montage du composant
-        const newSocket = io('http://localhost:3000'); // Remplace avec l'URL de ton serveur socket
+        const newSocket : any = io('http://localhost:3000');
         setSocket(newSocket);
 
-        // Nettoyage lors du démontage du composant
         return () => newSocket.close();
     }, []);
-
     if (!socket) {
         return <div>Connexion au serveur...</div>;
     }
