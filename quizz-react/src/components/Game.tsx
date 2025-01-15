@@ -11,7 +11,7 @@ function Game() {
 
                <div className={"text-blue-400 flex flex-col gap-1"}>
                    <p className={"text-[10px]"}>TEMP RESTANT</p>
-                   <p className={"font-bold"}>10</p>
+                   <p className={"font-bold"}>20</p>
                </div>
 
                <PlayerCircle player={{name: "Barbe Noire", score: 0, image: "/barbe_noir.jpg"}} reverse={false} />
@@ -21,7 +21,7 @@ function Game() {
                 En quelle année a <br /> été fondé le <br /> premier ordinateur ?
             </p>
 
-            <div className={"flex flex-col text-2xl gap-4"}>
+            <div className={"flex flex-col text-2xl gap-2"}>
                 <button className={"bg-white text-black py-6 px-2 rounded-md"}>1945</button>
                 <button className={"bg-white text-black py-6 px-2 rounded-md"}>1950</button>
                 <button className={"bg-white text-black py-6 px-2 rounded-md"}>1955</button>
