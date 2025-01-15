@@ -148,20 +148,17 @@ app.io.on("connection", (socket) => {
 	// Lorsqu'un joueur crée une partie
 	socket.on("create_game", (playerData) => {
 		// Créer une room unique pour cette partie (par exemple avec l'ID du socket ou un identifiant unique généré)
-		const gameId = `game_${socket.id}`;
+		const gameId = ``;
 		socket.join(gameId);
 
 		// Sauvegarder la partie dans la "BDD" (en mémoire ici)
 		games[gameId] = {
-			player1: playerData,  // Le joueur qui crée la partie
+			player1: playerData.id,  // Le joueur qui crée la partie
 			player2: null,        // Aucun second joueur pour l'instant
-			status: 'waiting_for_player', // Statut de la partie
 		};
 
-		console.log(`Partie créée avec ID : ${gameId} par le joueur : ${playerData.name}`);
-
 		// Notifier le créateur que la partie est en attente d'un second joueur
-		socket.emit("game_created", { gameId, message: "Partie créée, en attente d'un second joueur..." });
+		socket.emit("(game_created)", { gameId, message: "Partie créée, en attente d'un second joueur..." });
 	});
 
 	// Lorsqu'un second joueur rejoint une partie existante
@@ -194,10 +191,9 @@ app.io.on("connection", (socket) => {
 	// Gérer la déconnexion
 	socket.on("disconnect", () => {
 		console.log(`Joueur déconnecté : ${socket.id}`);
-
 		// Optionnel : Gérer la logique pour retirer un joueur déconnecté d'une partie en cours
 	});
 });
 
 
-start();
+start()
