@@ -8,6 +8,7 @@ import Dashboard from "./components/Dashboard.tsx";
 import {AuthProvider, useAuth} from "./context/AuthContext.tsx";
 import {SocketProvider} from "./context/SocketContext.tsx";
 import Home from "./components/Home.tsx";
+import Game from "./components/Game.tsx";
 
 function App() {
     const router = createBrowserRouter([
@@ -19,7 +20,7 @@ function App() {
                 { path: "/register", element: <Register /> },
                 { path: "/login", element: <Login /> },
                 { path: "/dashboard", element: <ProtectedRoute component={<Dashboard />} /> },
-                // { path: "/game/:id", element: <ProtectedRoute component={<Game />} /> },
+                { path: "/game/:id", element: <ProtectedRoute component={<Game />} /> }
             ],
         },
     ]);

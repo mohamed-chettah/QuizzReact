@@ -1,5 +1,10 @@
 import { createGame, updateGame } from "../controllers/games.js";
 export function gamesRoutes(app) {
+	// Liste des parties actives
+	app.get("/games", async (request, reply) => {
+		reply.send(games);
+	});
+
 	//création d'un jeu
 	app.post(
 		"/game",

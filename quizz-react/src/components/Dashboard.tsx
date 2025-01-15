@@ -1,9 +1,9 @@
-
 import {io} from "socket.io-client";
 import {useEffect, useState} from "react";
-import { Manager } from "socket.io-client";
+import {useNavigate} from "react-router-dom";
 
 export default function Dashboard() {
+    const navigate = useNavigate();
 
     const [party, setParty] = useState("");
     const [socket, setSocket] = useState(null); // State pour stocker l'instance de socket
@@ -22,9 +22,8 @@ export default function Dashboard() {
     useEffect(() => {
         if (socket) {
             socket.on('game_created', (data: any) => {
-                console.log(data);
+                navigate(`/game/${data.idGame}`);
             })
-
             return () => {
                 socket.off('game_created');
             }
@@ -33,30 +32,34 @@ export default function Dashboard() {
 
     function createRoom() {
         if (socket) {
-            socket.emit("create_game", { party: party });
+            socket.emit("create_game", { idUser : localStorage.getItem('id')});
+        } else {
+            console.error("Socket non initialisé");
+        }
+    }
+
+    function joinRoom() {
+        if (socket) {
+            socket.emit("join_game", { idUser : localStorage.getItem('id'), party: party });
         } else {
             console.error("Socket non initialisé");
         }
     }
 
     return (
-        <div className={"mt-10"}>
+        <div className={"mt-20"}>
             <h1 className={"text-black dark:text-white"}>Dashboard</h1>
 
             <div className={"p-20"}>
-                <h2 className={"text-black dark:text-white"}>QuizzUp</h2>
                 <div className={"flex gap-20 dark:text-white text-black"}>
                     <div>
                         <p>Créé une party :</p>
-                        <input value={party} // Lier la valeur de l'input au state 'party'
-                               onChange={(e) => setParty(e.target.value)} // Mettre à jour le state lorsque l'utilisateur tape
-                               type="text" className={"text-black"}  placeholder={"Nom de la party"}/>
-                        <button className={"dark:text-black text-white"} onClick={createRoom}>Créer</button>
+                        <button className={"mt-5 dark:text-black text-white"} onClick={createRoom}>Créer</button>
                     </div>
 
-                    <div >
+                    <div>
                         <p>Rejoindre une party :</p>
-                        <table >
+                        <table className={"mt-5"}>
                             <thead>
                             <tr>
                                 <th>Party</th>

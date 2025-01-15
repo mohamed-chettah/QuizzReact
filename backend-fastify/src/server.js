@@ -143,22 +143,21 @@ const start = async () => {
 let games = {}; // Pour stocker les parties en mémoire (à remplacer par une base de données si nécessaire)
 
 app.io.on("connection", (socket) => {
-	console.log(`Joueur connecté : ${socket.id}`);
 
 	// Lorsqu'un joueur crée une partie
 	socket.on("create_game", (playerData) => {
 		// Créer une room unique pour cette partie (par exemple avec l'ID du socket ou un identifiant unique généré)
-		const gameId = ``;
+		const gameId = `game_${socket.id}`;
 		socket.join(gameId);
 
 		// Sauvegarder la partie dans la "BDD" (en mémoire ici)
 		games[gameId] = {
-			player1: playerData.id,  // Le joueur qui crée la partie
+			player1: playerData.idUser,  // Le joueur qui crée la partie
 			player2: null,        // Aucun second joueur pour l'instant
 		};
 
-		// Notifier le créateur que la partie est en attente d'un second joueur
-		socket.emit("(game_created)", { gameId, message: "Partie créée, en attente d'un second joueur..." });
+		// Notifier le créateur que la partie est en attente d'un second joueur et envoi l'id de la partie
+		socket.emit("game_created", { idGame : gameId, message: "Partie créée, en attente d'un second joueur..." });
 	});
 
 	// Lorsqu'un second joueur rejoint une partie existante
@@ -174,7 +173,7 @@ app.io.on("connection", (socket) => {
 
 				// Mettre à jour la partie avec le second joueur
 				game.player2 = playerData;
-				game.status = 'ready_to_start';
+				game.state = 'ready_to_start';
 
 				console.log(`Joueur ${playerData.name} a rejoint la partie : ${gameId}`);
 
@@ -187,6 +186,14 @@ app.io.on("connection", (socket) => {
 			socket.emit("game_not_found", { message: "La partie n'existe pas." });
 		}
 	});
+
+	// TODO LANCER LA PARTY FAUT QU'il mettre prêt tout les deux
+
+	// TODO Envoi des questions
+
+	// TODO Réception des réponses
+
+	// TODO Fin de la partie
 
 	// Gérer la déconnexion
 	socket.on("disconnect", () => {

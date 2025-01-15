@@ -162,4 +162,5 @@ export function usersRoutes(app) {
 	app.get("/users/:id", async (request, reply) => {
 		reply.send(await getUserById(request.params.id));
 	});
+
 }
