@@ -21,6 +21,7 @@ function Game() {
                 En quelle année a <br /> été fondé le <br /> premier ordinateur ?
             </p>
 
+
             <div className={"flex flex-col text-2xl gap-2"}>
                 <button className={"bg-white text-black py-6 px-2 rounded-md"}>1945</button>
                 <button className={"bg-white text-black py-6 px-2 rounded-md"}>1950</button>
