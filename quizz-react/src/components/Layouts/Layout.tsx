@@ -19,7 +19,7 @@ const Layout = () => {
                 )}
             </div>
 
-            <main className="bg-white dark:bg-gray-800">
+            <main className=" bg-white dark:bg-gray-800 border-[1px] dark:border-white border-black-200">
                 <Outlet />
             </main>
         </div>

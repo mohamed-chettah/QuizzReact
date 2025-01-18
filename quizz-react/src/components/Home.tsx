@@ -1,6 +1,9 @@
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
+import {useAuth} from "../context/AuthContext.tsx";
 
 export default function Home() {
+    const auth = useAuth()
+    
     return (
         <div className="relative isolate overflow-hidden bg-gray-100 dark:bg-gray-900">
             <svg
@@ -49,7 +52,7 @@ export default function Home() {
                     </p>
                     <div className="mt-10 flex justify-center items-center gap-x-6">
                         <a
-                            href="/login"
+                            href={auth.isAuthenticated ? "/dashboard" : "/login"}
                             className="rounded-md px-3.5 py-2.5 text-sm font-semibold shadow-sm bg-indigo-600 text-white hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400"
                         >
                             Jouer maintenant
@@ -59,11 +62,9 @@ export default function Home() {
                 <div className="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-32">
                     <div className="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
                         <img
-                            src="https://tailwindui.com/plus/img/component-images/dark-project-app-screenshot.png"
+                            src="/screen.png"
                             alt="QuizzUp Interface"
-                            width={2432}
-                            height={1442}
-                            className="w-[76rem] rounded-md shadow-2xl ring-1 bg-gray-200 ring-gray-300 dark:bg-white/5 dark:ring-white/10"
+                            className="w-[32rem] rounded-md shadow-2xl ring-1 bg-gray-200 ring-gray-300 dark:bg-white/5 dark:ring-white/10"
                         />
                     </div>
                 </div>

@@ -24,7 +24,7 @@ export default function NavbarAuth() {
 
 
     return (
-        <Disclosure as="nav" className="bg-white dark:bg-slate-900 border-[1px] dark:border-white border-black">
+        <Disclosure as="nav" className="bg-white dark:bg-slate-900 border-[1px] dark:border-white border-black-200">
             {({ open }) => (
                 <>
                     <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -62,7 +62,7 @@ export default function NavbarAuth() {
                             </div>
                             <div className="flex gap-2 items-center bg-white dark:bg-slate-900">
                                 <button
-                                    className="text-sm bg-red-200"
+                                    className="text-sm text-white bg-[#FB5757]"
                                     onClick={logoutUser}
                                 >
                                     Déconnexion

@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import PlayerCircle from "./Ui/playerCircle.tsx";
+import PlayerCircle from "./Ui/PlayerCircle.tsx";
 
 function Game() {
     const { id } = useParams();
