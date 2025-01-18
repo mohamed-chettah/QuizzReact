@@ -53,7 +53,7 @@ export default function Home() {
                     <div className="mt-10 flex justify-center items-center gap-x-6">
                         <a
                             href={auth.isAuthenticated ? "/dashboard" : "/login"}
-                            className="rounded-md px-3.5 py-2.5 text-sm font-semibold shadow-sm bg-indigo-600 text-white hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400"
+                            className="rounded-md px-3.5 py-2.5 text-sm font-semibold shadow-sm bg-[#FB5757] text-white hover:bg-[#FB5757]/10 "
                         >
                             Jouer maintenant
                         </a>

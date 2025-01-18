@@ -42,7 +42,7 @@ export default function NavbarAuth() {
                             </div>
                             <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                                 <div className="flex flex-shrink-0 items-center">
-                                    <p className={"text-slate-900 dark:text-white"}>QuizUp</p>
+                                    <img src="/big-logo.png" className={"w-20"}/>
                                 </div>
                                 <div className="hidden sm:ml-6 sm:block">
                                     <div className="flex space-x-4">
@@ -50,7 +50,7 @@ export default function NavbarAuth() {
                                             <NavLink
                                                 key={item.name}
                                                 className={({ isActive }) =>
-                                                    isActive ? "text-blue-500 font-bold" : "text-gray-500"
+                                                    isActive ? "text-[#FB5757] font-bold" : "text-gray-500"
                                                 }
                                                 to={item.href}
                                             >
@@ -61,11 +61,16 @@ export default function NavbarAuth() {
                                 </div>
                             </div>
                             <div className="flex gap-2 items-center bg-white dark:bg-slate-900">
-                                <button
-                                    className="text-sm text-white bg-[#FB5757]"
+                                <button title={"Déconnexion"}
+                                    className="text-sm bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 p-2  text-[#FB5757]"
                                     onClick={logoutUser}
                                 >
-                                    Déconnexion
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                         stroke-linejoin="round" className="lucide lucide-forward">
+                                        <polyline points="15 17 20 12 15 7"/>
+                                        <path d="M4 18v-2a4 4 0 0 1 4-4h12"/>
+                                    </svg>
                                 </button>
                                 <DarkModeToggle/>
                             </div>
@@ -74,7 +79,7 @@ export default function NavbarAuth() {
 
                     <Disclosure.Panel className="sm:hidden">
                         <div className="space-y-1 px-2 pb-3 pt-2">
-                            {navigation.map((item) => (
+                        {navigation.map((item) => (
                                 <NavLink
                                     key={item.name}
                                     className={({ isActive }) =>

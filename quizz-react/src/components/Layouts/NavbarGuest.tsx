@@ -34,7 +34,7 @@ export default function NavbarGuest() {
                             </div>
                             <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                                 <div className="flex flex-shrink-0 items-center">
-                                    <p className={"text-slate-900 dark:text-white"}>QuizzUp</p>
+                                    <img src="/big-logo.png" className={"w-20"}/>
                                 </div>
                                 <div className="hidden sm:ml-6 sm:block">
                                     <div className="flex space-x-4">
