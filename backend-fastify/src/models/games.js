@@ -4,32 +4,41 @@ import User from "./users.js";
 
 const Game = sequelize.define("game", {
 	id: {
-		type: DataTypes.STRING,
+		type: DataTypes.UUID,
 		primaryKey: true,
-		defaultValue: DataTypes.STRING,
-	},
-	winnerScore: {
-		type: DataTypes.INTEGER,
-		allowNull: true,
-	},
-	state: {
-		type: DataTypes.ENUM("pending", "playing", "finished"),
+		defaultValue: DataTypes.UUIDV4,
 		allowNull: false,
-		defaultValue: "pending",
+	},
+	player1Id: {
+		type: DataTypes.UUID,  // 🔥 Si users.id est UUID, ici aussi
+		allowNull: false,
+		references: {
+			model: User,
+			key: "id",
+		},
+	},
+	player2Id: {
+		type: DataTypes.UUID,
+		allowNull: true,
+		references: {
+			model: User,
+			key: "id",
+		},
+	},
+	winnerId: {
+		type: DataTypes.UUID,
+		allowNull: true,
+		references: {
+			model: User,
+			key: "id",
+		},
 	},
 });
-Game.belongsTo(User, { targetKey: "id", foreignKey: "creator", as: "player1" });
-Game.belongsTo(User, {
-	allowNull: true,
-	targetKey: "id",
-	foreignKey: "player",
-	as: "player2",
-});
-Game.belongsTo(User, {
-	allowNull: true,
-	targetKey: "id",
-	foreignKey: "winner",
-	as: "winPlayer",
-});
+
+
+// Relations correctes avec alias
+Game.belongsTo(User, { foreignKey: "player1Id", as: "player1" });
+Game.belongsTo(User, { foreignKey: "player2Id", as: "player2" });
+Game.belongsTo(User, { foreignKey: "winnerId", as: "winner" });
 
 export default Game;

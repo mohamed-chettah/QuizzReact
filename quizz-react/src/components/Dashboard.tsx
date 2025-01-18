@@ -24,6 +24,10 @@ export default function Dashboard() {
             socket.on('game_created', (data: any) => {
                 navigate(`/waiting/${data.idGame}`);
             })
+
+            socket.on('game_ready', (data: any) => {
+                navigate(`/waiting/${data.idGame}`);
+            })
             return () => {
                 socket.off('game_created');
             }
@@ -40,7 +44,8 @@ export default function Dashboard() {
 
     function joinRoom() {
         if (socket) {
-            socket.emit("join_game", { idUser : localStorage.getItem('id'), party: party });
+            socket.emit("join_game", { idUser : localStorage.getItem('id'), gameId : party });
+            console.log(party);
         } else {
             console.error("Socket non initialisé");
         }
@@ -67,17 +72,17 @@ export default function Dashboard() {
 
                             <p>OU</p>
 
-                            <input placeholder={"id de la partie"} className={"focus:border-blue-400 dark:border-white border-[1px]  border-black-400  rounded-lg p-2 text-black"} type="text" />
+                            <input value={party}
+                                   onChange={(e) => setParty(e.target.value)} placeholder={"id de la partie"} className={"focus:border-blue-400 dark:border-white border-[1px]  border-black-400  rounded-lg p-2 text-black"} type="text" />
 
                             <button
                                 className={"flex gap-1 xl:flex-row flex-col dark:border-white border-[1px]  border-black-400  items-center dark:text-black text-white"}
-                                onClick={createRoom}>
+                                onClick={joinRoom}>
                                 <img className={"xl:w-12 w-8 "} src="/quizup-logo-removebg-preview.png"/><p
                                 className={"xl:text-md text-sm text-black"}>Rejoindre une partie </p>
                             </button>
 
                         </div>
-
 
                     </div>
 

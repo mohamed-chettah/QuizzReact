@@ -13,6 +13,7 @@ import { gamesRoutes } from "./routes/games.js";
 import { sequelize } from "./bdd.js";
 
 import socketioServer from "fastify-socket.io"
+import {createGame} from "./controllers/games.js";
 
 //Test de la connexion
 try {
@@ -154,7 +155,13 @@ app.io.on("connection", (socket) => {
 		games[gameId] = {
 			player1: playerData.idUser,  // Le joueur qui crée la partie
 			player2: null,        // Aucun second joueur pour l'instant
+			state: 'pending',
 		};
+
+		// créate game in db
+		createGame(games).then(r => {
+			console.log(r);
+		});
 
 		// Notifier le créateur que la partie est en attente d'un second joueur et envoi l'id de la partie
 		socket.emit("game_created", { idGame : gameId, message: "Partie créée, en attente d'un second joueur..." });
@@ -162,7 +169,8 @@ app.io.on("connection", (socket) => {
 
 	// Lorsqu'un second joueur rejoint une partie existante
 	socket.on("join_game", (data) => {
-		const { gameId, playerData } = data;
+		const gameId = data.gameId;
+		const player2 = data.idUser;
 
 		if (games[gameId]) {
 			const game = games[gameId];
@@ -172,13 +180,11 @@ app.io.on("connection", (socket) => {
 				socket.join(gameId); // Le second joueur rejoint la room
 
 				// Mettre à jour la partie avec le second joueur
-				game.player2 = playerData;
-				game.state = 'ready_to_start';
-
-				console.log(`Joueur ${playerData.name} a rejoint la partie : ${gameId}`);
+				game.player2 = player2;
+				game.state = 'playing';
 
 				// Notifier les deux joueurs que la partie est prête à commencer
-				app.io.to(gameId).emit("game_ready", { gameId, message: "Les deux joueurs sont connectés. La partie peut commencer !" });
+				app.io.to(gameId).emit("game_ready", {  idGame : gameId, message: "Les deux joueurs sont connectés. La partie peut commencer !" });
 			} else {
 				socket.emit("game_full", { message: "La partie est déjà pleine." });
 			}
@@ -186,8 +192,6 @@ app.io.on("connection", (socket) => {
 			socket.emit("game_not_found", { message: "La partie n'existe pas." });
 		}
 	});
-
-	// TODO LANCER LA PARTY FAUT QU'il mettre prêt tout les deux
 
 	// TODO Envoi des questions
 
@@ -197,7 +201,6 @@ app.io.on("connection", (socket) => {
 
 	// Gérer la déconnexion
 	socket.on("disconnect", () => {
-		console.log(`Joueur déconnecté : ${socket.id}`);
 		// Optionnel : Gérer la logique pour retirer un joueur déconnecté d'une partie en cours
 	});
 });

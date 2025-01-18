@@ -1,16 +1,7 @@
 import Game from "../models/games.js";
 
-export async function getActiveGame(){
-	return await Game.findAll({
-		where: {
-			state: "pending",
-		},
-	});
-
-}
-
-export async function createGame(userId) {
-	if (!userId) {
+export async function createGame(game) {
+	if (!game.player1player1) {
 		return { error: "L'identifiant du joueur est manquant" };
 	}
 	const datas = await Game.create({ creator: userId });
