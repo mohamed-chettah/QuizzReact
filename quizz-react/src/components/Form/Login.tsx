@@ -111,13 +111,15 @@ export default function Login() {
                         <div className="mt-8 flex flex-col gap-4">
                             <button
                                 type="submit"
-                                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:focus-visible:outline-indigo-500"
+                                className="rounded-md  bg-[#FB5757] hover:bg-[#FB5757]/80 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm
+                                 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+                                "
                             >
                                 Se connecter
                             </button>
                             <p className="text-sm text-center text-gray-600 dark:text-gray-400">
                                 Pas encore de compte ?{' '}
-                                <a href="/register" className="font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300">
+                                <a href="/register" className="font-semibold text-[#FB5757] ">
                                     S'inscrire
                                 </a>
                             </p>

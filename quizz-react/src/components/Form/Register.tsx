@@ -35,8 +35,12 @@ export default function Register() {
             setError(null)
             alert("Inscription réussie")
             navigate('/login'); // Redirection vers la page d'accueil après inscription
-        } catch (err) {
-            setError("Inscription echoué " + err.message);
+        } catch (err : unknown) {
+            if (err instanceof Error) {
+                setError("Inscription échouée : " + err.message);
+            } else {
+                setError("Inscription échouée : Une erreur inconnue s'est produite.");
+            }
         }
     };
 
@@ -152,14 +156,14 @@ export default function Register() {
                         {error && (
                             <p className="mt-4 text-sm text-red-600 dark:text-red-400">{error}</p>
                         )}
-                        <div className="mt-8 flex justify-end">
-                            <button
-                                type="submit"
-                                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:focus-visible:outline-indigo-500"
-                            >
-                                S'inscrire
-                            </button>
-                        </div>
+                        <button
+                            type="submit"
+                            className="mt-5 w-full rounded-md bg-[#FB5757]  hover:bg-[#FB5757]/80 text-center
+                            text-sm font-semibold text-white shadow-sm
+                          focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 "
+                        >
+                            S'inscrire
+                        </button>
                     </div>
                 </form>
             </div>

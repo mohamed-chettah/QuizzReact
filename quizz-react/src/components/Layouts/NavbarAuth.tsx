@@ -1,6 +1,6 @@
-import { Fragment } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+
+import { Disclosure } from '@headlessui/react'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import DarkModeToggle from "../DarkToggle.tsx";
 import {NavLink, useNavigate} from "react-router-dom";
 import {useAuth} from "../../context/AuthContext.tsx";
@@ -9,10 +9,6 @@ const navigation = [
     { name: 'Accueil', href: '/'},
     { name: 'Jouer', href: 'dashboard'},
 ]
-
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
 
 export default function NavbarAuth() {
     const {logout} = useAuth();
@@ -62,14 +58,13 @@ export default function NavbarAuth() {
                             </div>
                             <div className="flex gap-2 items-center bg-white dark:bg-slate-900">
                                 <button title={"Déconnexion"}
-                                    className="text-sm bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 p-2  text-[#FB5757]"
-                                    onClick={logoutUser}
+                                        className="text-sm bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 p-2  text-[#FB5757]"
+                                        onClick={logoutUser}
                                 >
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                         stroke-linejoin="round" className="lucide lucide-forward">
-                                        <polyline points="15 17 20 12 15 7"/>
-                                        <path d="M4 18v-2a4 4 0 0 1 4-4h12"/>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"  viewBox="0 0 24 24">
+                                        <path fill="none" stroke="#FB5757" stroke-linecap="round"
+                                              stroke-linejoin="round" stroke-width="2"
+                                              d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4m7 14l5-5l-5-5m5 5H9"/>
                                     </svg>
                                 </button>
                                 <DarkModeToggle/>

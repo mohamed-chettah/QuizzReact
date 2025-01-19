@@ -1,6 +1,6 @@
-import { Fragment } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+
+import { Disclosure, } from '@headlessui/react'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import DarkModeToggle from "../DarkToggle.tsx";
 import {NavLink} from "react-router-dom";
 
@@ -9,10 +9,6 @@ const navigation = [
     { name: 'Connexion', href: 'login'},
     { name: 'Inscription', href: 'register'},
 ]
-
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
 
 export default function NavbarGuest() {
     return (
@@ -42,7 +38,7 @@ export default function NavbarGuest() {
                                             <NavLink
                                                 key={item.name}
                                                 className={({ isActive }) =>
-                                                    isActive ? "text-blue-500 font-bold" : "text-gray-500"
+                                                    isActive ? "text-[#FB5757] font-bold" : "text-gray-500"
                                                 }
                                                 to={item.href}
                                             >
