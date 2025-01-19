@@ -5,12 +5,16 @@ import User from "./users.js";
 const Game = sequelize.define("game", {
 	id: {
 		type: DataTypes.UUID,
-		primaryKey: true,
 		defaultValue: DataTypes.UUIDV4,
+		primaryKey: true,
+	},
+	state: {
+		type: DataTypes.ENUM("pending", "playing", "finished"),
 		allowNull: false,
+		defaultValue: "pending",
 	},
 	player1Id: {
-		type: DataTypes.UUID,  // 🔥 Si users.id est UUID, ici aussi
+		type: DataTypes.STRING,
 		allowNull: false,
 		references: {
 			model: User,
@@ -18,15 +22,15 @@ const Game = sequelize.define("game", {
 		},
 	},
 	player2Id: {
-		type: DataTypes.UUID,
+		type: DataTypes.STRING,
 		allowNull: true,
 		references: {
 			model: User,
 			key: "id",
 		},
 	},
-	winnerId: {
-		type: DataTypes.UUID,
+	winner: {
+		type: DataTypes.STRING,
 		allowNull: true,
 		references: {
 			model: User,
@@ -35,10 +39,8 @@ const Game = sequelize.define("game", {
 	},
 });
 
-
-// Relations correctes avec alias
 Game.belongsTo(User, { foreignKey: "player1Id", as: "player1" });
 Game.belongsTo(User, { foreignKey: "player2Id", as: "player2" });
-Game.belongsTo(User, { foreignKey: "winnerId", as: "winner" });
+Game.belongsTo(User, { foreignKey: "winner", as: "winners" });
 
 export default Game;

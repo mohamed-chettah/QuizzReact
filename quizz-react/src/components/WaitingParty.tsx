@@ -31,9 +31,9 @@ function WaitingParty() {
                     </span>
                     <button
                         onClick={copyToClipboard}
-                        className="w-full px-6 py-3 bg-indigo-600 dark:bg-indigo-500 text-white rounded-lg font-semibold
-                                   hover:bg-indigo-700 dark:hover:bg-indigo-400 transition-all duration-300 ease-in-out
-                                   transform hover:scale-105 focus:outline-none focus:ring-2
+                        className="w-full px-6 py-3 bg-[#FB5757] hover:bg-[#FB5757]/80  text-white rounded-lg font-semibold
+                                   transition-all duration-300 ease-in-out
+                                   transform focus:outline-none focus:ring-2
                                    focus:ring-indigo-400 focus:ring-opacity-50"
                     >
                         {buttonText}
