@@ -4,8 +4,7 @@ import User from "./users.js";
 
 const Game = sequelize.define("game", {
 	id: {
-		type: DataTypes.UUID,
-		defaultValue: DataTypes.UUIDV4,
+		type: DataTypes.STRING,
 		primaryKey: true,
 	},
 	state: {
@@ -21,6 +20,7 @@ const Game = sequelize.define("game", {
 			key: "id",
 		},
 	},
+
 	player2Id: {
 		type: DataTypes.STRING,
 		allowNull: true,

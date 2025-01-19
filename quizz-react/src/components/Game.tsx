@@ -1,10 +1,11 @@
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 import PlayerCircle from "./Ui/PlayerCircle.tsx";
 
 function Game() {
-    const { id } = useParams();
+    // const { id } = useParams();
 
     return (
+
         <section className={"flex flex-col gap-16 p-4 bg-black "}>
            <div className={"flex gap-20"}>
                <PlayerCircle player={{name: "Mohamed", score: 0, image: "/luffy3.png"}} reverse={false} />

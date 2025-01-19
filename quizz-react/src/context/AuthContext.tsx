@@ -91,9 +91,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             if (response.data.error) {
                 throw new Error(response.data.error);
             }
-        } catch (error) {
-            console.error("Erreur lors de l'inscription", error);
-            throw new Error(error.message || "Failed to register");
+        } catch (error : unknown) {
+            if (error instanceof ErrorEvent) {
+                console.error("Erreur lors de l'inscription", error);
+                throw new Error(error.message || "Failed to register");
+            }
         }
     };
 

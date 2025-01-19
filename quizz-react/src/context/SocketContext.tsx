@@ -1,31 +1,21 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
+import { createContext, useContext, useEffect, useState } from "react";
+import { io, Socket } from "socket.io-client";
 
-// Créer le contexte
-const SocketContext = createContext(null);
+const SocketContext = createContext<Socket | null>(null);
 
-// Hook pour accéder facilement au contexte
-export const useSocket = () => {
-    return useContext(SocketContext);
-};
-
-// Composant Provider pour encapsuler l'application et partager le socket
-export const SocketProvider = ({ children }) => {
-    const [socket, setSocket] = useState(null);
+export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
+    const [socket, setSocket] = useState<Socket | null>(null);
 
     useEffect(() => {
-        const newSocket : any = io('http://localhost:3000');
+        const newSocket = io("http://localhost:3000"); // Connexion au serveur Socket.IO
         setSocket(newSocket);
 
-        return () => newSocket.close();
+        return () => {
+            newSocket.disconnect(); // Déconnexion lors du démontage du contexte
+        };
     }, []);
-    if (!socket) {
-        return <div>Connexion au serveur...</div>;
-    }
 
-    return (
-        <SocketContext.Provider value={socket}>
-            {children}
-        </SocketContext.Provider>
-    );
+    return <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>;
 };
+
+export const useSocket = () => useContext(SocketContext);

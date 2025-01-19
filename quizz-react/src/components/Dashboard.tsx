@@ -1,23 +1,12 @@
-import {io} from "socket.io-client";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {useSocket} from "../context/SocketContext.tsx";
 
 export default function Dashboard() {
     const navigate = useNavigate();
 
     const [party, setParty] = useState("");
-    const [socket, setSocket] = useState(null); // State pour stocker l'instance de socket
-
-    // Initialiser la connexion une seule fois au montage du composant
-    useEffect(() => {
-        const newSocket : any = io("http://localhost:3000"); // Initialiser la connexion Socket.IO
-        setSocket(newSocket); // Stocker l'instance dans le state
-
-        // Nettoyer la connexion lorsque le composant est démonté
-        return () => {
-            newSocket.disconnect();
-        };
-    }, []); // Le tableau vide [] garantit que le code ne s'exécute qu'une seule fois
+    const socket = useSocket(); // Récupère l'instance globale de Socket.IO
 
     useEffect(() => {
         if (socket) {
@@ -43,11 +32,12 @@ export default function Dashboard() {
     }
 
     function joinRoom() {
-        if (socket) {
-            socket.emit("join_game", { idUser : localStorage.getItem('id'), gameId : party });
-            console.log(party);
-        } else {
-            console.error("Socket non initialisé");
+        if( party !== ""){
+            if (socket) {
+                socket.emit("join_game", { idUser : localStorage.getItem('id'), gameId : party });
+            } else {
+                console.error("Socket non initialisé");
+            }
         }
     }
 

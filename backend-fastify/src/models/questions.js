@@ -3,9 +3,9 @@ import { sequelize } from "../bdd.js";
 
 const Question = sequelize.define("question", {
     id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
     },
     labelQuestion: {
         type: DataTypes.STRING,

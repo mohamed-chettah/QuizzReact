@@ -1,9 +1,17 @@
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 
 function WaitingParty() {
-    const { id } = useParams();
+    const { id, joiningParty } =  useParams<{ id: string; joiningParty: string }>();
     const [buttonText, setButtonText] = useState('Copier');
+
+    // Si joiningParty on lance la partie sur les deux clients
+    useEffect(() => {
+        if (joiningParty) {
+            // socket.emit('game_ready', { idGame: id, join: joiningParty });
+        }
+    }, [joiningParty]);
+
 
     const copyToClipboard = () => {
         if (id) {
@@ -20,9 +28,6 @@ function WaitingParty() {
     return (
         <section className="flex items-center justify-center text-gray-900 dark:text-white p-4 transition-colors duration-300">
             <div className="bg-white dark:bg-gray-900 bg-opacity-10 dark:bg-opacity-30 backdrop-filter backdrop-blur-lg rounded-xl p-8 shadow-xl max-w-md w-full">
-                <div className="flex justify-center items-center">
-                    <img src="/big-logo.png" className="w-40"/>
-                </div>
                 <h2 className="text-2xl mt-5 font-semibold mb-6 text-center">Salle d'attente</h2>
                 <p className="text-lg mb-4 text-center">ID de la partie à envoyer à ton futur adversaire :</p>
                 <div className="flex flex-col items-center gap-4">
