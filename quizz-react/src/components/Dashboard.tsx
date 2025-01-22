@@ -15,7 +15,7 @@ export default function Dashboard() {
             })
 
             socket.on('game_ready', (data: any) => {
-                navigate(`/waiting/${data.idGame}`);
+                navigate(`/game/${data.idGame}`);
             })
             return () => {
                 socket.off('game_created');

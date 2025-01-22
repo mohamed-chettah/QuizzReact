@@ -9,7 +9,7 @@ import fastifyJWT from "@fastify/jwt";
 // bdd
 import { sequelize } from "./bdd.js"; // D'abord, on importe Sequelize
 import socketioServer from "fastify-socket.io"
-import {createGame} from "./controllers/games.js";
+import {createGame, getGame, updateGame} from "./controllers/games.js";
 // ✅ Importer les modèles APRES avoir importé `sequelize`
 import Game from "./models/games.js";
 import Manche from "./models/manches.js";
@@ -157,6 +157,8 @@ app.io.on("connection", (socket) => {
 	socket.on("create_game", (playerData) => {
 		// Créer une room unique pour cette partie (par exemple avec l'ID du socket ou un identifiant unique généré)
 		const gameId = `game_${socket.id}`;
+
+		// Rejoint la Room
 		socket.join(gameId);
 
 		// Sauvegarder la partie dans la "BDD" (en mémoire ici)
@@ -185,7 +187,6 @@ app.io.on("connection", (socket) => {
 		});
 		if (game) {
 
-			console.log(game)
 			// Vérifier que la partie est en attente d'un second joueur
 			if (game.player2Id === null && player2) {
 				socket.join(gameId); // Le second joueur rejoint la room
@@ -205,7 +206,10 @@ app.io.on("connection", (socket) => {
 				});
 
 				// Notifier les deux joueurs que la partie est prête à commencer
-				socket.emit("game_ready", { idGame : gameId, message: "Les deux joueurs sont connectés. La partie peut commencer !" });
+				app.io.to(gameId).emit("game_ready", {
+					idGame: gameId,
+					message: "Les deux joueurs sont connectés. La partie peut commencer !"
+				});
 			} else {
 				socket.emit("game_full", { message: "La partie est déjà pleine." });
 			}

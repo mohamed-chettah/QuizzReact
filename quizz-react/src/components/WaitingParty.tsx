@@ -1,15 +1,22 @@
-import { useParams } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {useEffect, useState} from 'react';
+import {useSocket} from "../context/SocketContext.tsx";
 
 function WaitingParty() {
     const { id, joiningParty } =  useParams<{ id: string; joiningParty: string }>();
     const [buttonText, setButtonText] = useState('Copier');
+    const socket = useSocket(); // Récupère l'instance globale de Socket.IO
+    const navigate = useNavigate()
 
     // Si joiningParty on lance la partie sur les deux clients
     useEffect(() => {
-        if (joiningParty) {
-            // socket.emit('game_ready', { idGame: id, join: joiningParty });
+        if (socket) {
+            socket.on('game_ready', (data: any) => {
+                console.log('game_ready', data);
+                navigate(`/game/${data.idGame}`);
+            })
         }
+
     }, [joiningParty]);
 
     const copyToClipboard = () => {
