@@ -6,6 +6,7 @@ const Game = sequelize.define("game", {
 	id: {
 		type: DataTypes.STRING,
 		primaryKey: true,
+		unique: true
 	},
 	state: {
 		type: DataTypes.ENUM("pending", "playing", "finished"),

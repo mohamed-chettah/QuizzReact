@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import {useSocket} from "../context/SocketContext.tsx";
 
 function WaitingParty() {
-    const { id, joiningParty } =  useParams<{ id: string; joiningParty: string }>();
+    const { id } =  useParams<{ id: string; joiningParty: string }>();
     const [buttonText, setButtonText] = useState('Copier');
     const socket = useSocket(); // Récupère l'instance globale de Socket.IO
     const navigate = useNavigate()
@@ -12,12 +12,10 @@ function WaitingParty() {
     useEffect(() => {
         if (socket) {
             socket.on('game_ready', (data: any) => {
-                console.log('game_ready', data);
                 navigate(`/game/${data.idGame}`);
             })
         }
-
-    }, [joiningParty]);
+    });
 
     const copyToClipboard = () => {
         if (id) {

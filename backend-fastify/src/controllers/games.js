@@ -1,4 +1,5 @@
 import Game from "../models/games.js";
+import User from "../models/users.js";
 
 export async function createGame(game) {
 	if (!game.player1) {
@@ -10,7 +11,6 @@ export async function createGame(game) {
 
 export async function getGame(request) {
 	const { gameId } = request.params;
-	console.log("getGame", gameId);
 	if (!gameId) {
 		return {error: "L'identifiant de la partie est manquant"};
 	}
@@ -23,7 +23,6 @@ export async function getGame(request) {
 }
 
 export async function updateGame(request) {
-	console.log("updateGame", request);
 	const { action, gameId } = request.params;
 	 if (!gameId) {
 		return { error: "L'identifiant de la partie est manquant" };
@@ -37,7 +36,6 @@ export async function updateGame(request) {
 		return { error: "Cette partie est déjà terminée !" };
 	}
 
-	console.log("action", action);
 	switch (action) {
 		case "join":
 			if (game.dataValues.player != null) {
@@ -62,5 +60,28 @@ export async function updateGame(request) {
 	}
 
 	await game.save();
-	return game;
+
+	if (action === "finish") {
+		return { message: "La partie est terminée." };
+	}
+
+	if (!game){
+		return null
+	}
+
+	return await Game.findOne({
+		where: {id: game.id},
+		include: [
+			{
+				model: User, // Assure-toi d'importer ton modèle User
+				as: "player1",
+				attributes: ["id", "username"] // Sélectionne les champs que tu veux récupérer
+			},
+			{
+				model: User,
+				as: "player2",
+				attributes: ["id", "username"]
+			}
+		]
+	});
 }

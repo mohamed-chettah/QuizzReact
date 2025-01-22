@@ -155,6 +155,7 @@ app.io.on("connection", (socket) => {
 
 	// Lorsqu'un joueur crée une partie
 	socket.on("create_game", (playerData) => {
+		console.log("create_game", playerData);
 		// Créer une room unique pour cette partie (par exemple avec l'ID du socket ou un identifiant unique généré)
 		const gameId = `game_${socket.id}`;
 
@@ -180,6 +181,7 @@ app.io.on("connection", (socket) => {
 
 	// Lorsqu'un second joueur rejoint une partie existante
 	socket.on("join_game", async (data) => {
+		console.log("join_game", data);
 		const gameId = data.gameId;
 		const player2 = data.idUser;
 		const game = await getGame({params: {gameId: gameId}}).then(r => {
@@ -196,18 +198,16 @@ app.io.on("connection", (socket) => {
 					player2: player2,
 					state: 'playing',
 				};
-
-				console.log(gameData)
-
 				// Mettre à jour la partie en BDD
-				await updateGame({params: {action: "join", gameId: gameId}, body: { player2: player2, state: 'playing'}
+				const gameUpdated = await updateGame({params: {action: "join", gameId: gameId}, body: { player2: player2, state: 'playing'}
 				}).then(r => {
-					console.log(r);
+					return r;
 				});
 
 				// Notifier les deux joueurs que la partie est prête à commencer
 				app.io.to(gameId).emit("game_ready", {
 					idGame: gameId,
+					game: gameUpdated,
 					message: "Les deux joueurs sont connectés. La partie peut commencer !"
 				});
 			} else {
@@ -226,6 +226,7 @@ app.io.on("connection", (socket) => {
 
 	// Gérer la déconnexion
 	socket.on("disconnect", () => {
+		console.log("disconnect", socket.id);
 		// Optionnel : Gérer la logique pour retirer un joueur déconnecté d'une partie en cours
 	});
 });
