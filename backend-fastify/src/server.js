@@ -12,7 +12,6 @@ import socketioServer from "fastify-socket.io"
 import {createGame} from "./controllers/games.js";
 // ✅ Importer les modèles APRES avoir importé `sequelize`
 import Game from "./models/games.js";
-import User from "./models/users.js";
 import Manche from "./models/manches.js";
 import Question from "./models/questions.js";
 

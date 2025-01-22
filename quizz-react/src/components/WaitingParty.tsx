@@ -12,7 +12,6 @@ function WaitingParty() {
         }
     }, [joiningParty]);
 
-
     const copyToClipboard = () => {
         if (id) {
             navigator.clipboard.writeText(id).then(() => {
