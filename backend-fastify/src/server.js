@@ -181,7 +181,6 @@ app.io.on("connection", (socket) => {
 
 	// Lorsqu'un second joueur rejoint une partie existante
 	socket.on("join_game", async (data) => {
-		console.log("join_game", data);
 		const gameId = data.gameId;
 		const player2 = data.idUser;
 		const game = await getGame({params: {gameId: gameId}}).then(r => {
@@ -216,6 +215,31 @@ app.io.on("connection", (socket) => {
 		} else {
 			socket.emit("game_not_found", { message: "La partie n'existe pas." });
 		}
+	});
+
+	// Récuperation des infos de la partie
+	socket.on("get_game_state", async (gameId) => {
+
+
+		console.log("get_game_state : " + gameId);
+		console.log(`game_${socket.id}` + "get_game_state" + gameId)
+
+
+		if (gameId) {
+			const game = await getGame({params: {gameId}}).then(r => {
+				return r;
+			});
+
+			if (!game) {
+				socket.emit("error", {message: "La partie n'existe pas."});
+				return;
+			}
+			socket.emit("game_state", {game});
+		}
+		else {
+			socket.emit("error", {message: "L'identifiant de la partie est incorrect."});
+		}
+
 	});
 
 	// TODO Envoi des questions

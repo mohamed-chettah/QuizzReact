@@ -1,6 +1,7 @@
 import PlayerCircle from "./Ui/PlayerCircle.tsx";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useSocket } from "../context/SocketContext.tsx";
+import {useParams} from "react-router-dom";
 
 export type GameData = {
     player1: {
@@ -19,23 +20,18 @@ export type GameData = {
 
 function Game() {
     const socket = useSocket();
+    const { id } =  useParams<{ id: string }>();
+
+
 
     // États pour stocker la partie et les joueurs
     const [gameData, setGameData] = useState<GameData | null>(null);
     const [player1, setPlayer1] = useState({ id: "", username: "", score: 0, image: "/luffy3.png" });
     const [player2, setPlayer2] = useState({ id: "", username: "", score: 0, image: "/barbe_noir.jpg" });
 
-    // Fonction qui gère "game_ready" et met à jour gameData
-    const handleGameReady = useCallback((data: { game: GameData }) => {
-        console.log("🔹 Game Ready Event Received:", data);
-        setGameData(data.game); // ✅ On met à jour gameData
-    }, []);
-
     // Quand gameData change, on met à jour les joueurs
     useEffect(() => {
         if (!gameData) return;
-
-        console.log("🎮 Mise à jour des joueurs avec gameData:", gameData);
 
         const userId = localStorage.getItem("id");
         if (gameData.player1.id === userId) {
@@ -62,15 +58,23 @@ function Game() {
     // Gestion des événements socket.io
     useEffect(() => {
         if (socket) {
-            socket.on("game_ready", handleGameReady);
+            socket.on("game_state", (data: any) => {
+                alert("🔹 Game State Event Received:" + data);
+                setGameData(data.game);
+            })
+
+            // socket.on("error", (data: any) => {
+            //     alert("🔴 Error Event Received:" + data)
+            // })
+
+            if(id){
+                alert("🔹 Emitting get_game_state event : " + id)
+                socket.emit("get_game_state", { id });
+            }
+
         }
 
-        return () => {
-            if (socket) {
-                socket.off("game_ready", handleGameReady);
-            }
-        };
-    }, [socket, handleGameReady]);
+    }, [id]);
 
     return (
         <section className="flex flex-col gap-16 p-4 bg-black">

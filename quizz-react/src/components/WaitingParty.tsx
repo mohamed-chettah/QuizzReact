@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import {useSocket} from "../context/SocketContext.tsx";
 
 function WaitingParty() {
-    const { id } =  useParams<{ id: string; joiningParty: string }>();
+    const { id } =  useParams<{ id: string }>();
     const [buttonText, setButtonText] = useState('Copier');
     const socket = useSocket(); // Récupère l'instance globale de Socket.IO
     const navigate = useNavigate()

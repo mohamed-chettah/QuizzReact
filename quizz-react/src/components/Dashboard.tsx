@@ -4,39 +4,42 @@ import {useSocket} from "../context/SocketContext.tsx";
 
 export default function Dashboard() {
     const navigate = useNavigate();
-
     const [party, setParty] = useState("");
-    const socket = useSocket(); // Récupère l'instance globale de Socket.IO
+    const socket = useSocket();
 
     useEffect(() => {
-        if (socket) {
-            socket.on('game_created', (data: any) => {
-                navigate(`/waiting/${data.idGame}`);
-            })
+        if (!socket) return;
 
-            socket.on('game_ready', (data: any) => {
-                navigate(`/game/${data.idGame}`);
-            })
-            return () => {
-                socket.off('game_created');
-            }
-        }
-    });
+        // Define the handler callbacks:
+        const handleGameCreated = (data: any) => {
+            navigate(`/waiting/${data.idGame}`);
+        };
+
+        const handleGameReady = (data: any) => {
+            navigate(`/game/${data.idGame}`);
+        };
+
+        // Attach listeners
+        socket.on("game_created", handleGameCreated);
+        socket.on("game_ready", handleGameReady);
+
+        // Cleanup: remove the listeners on unmount or re-render
+        return () => {
+            socket.off("game_created", handleGameCreated);
+            socket.off("game_ready", handleGameReady);
+        };
+    }, [socket, navigate]); // <= Add the dependency array
 
     function createRoom() {
         if (socket) {
-            socket.emit("create_game", { idUser : localStorage.getItem('id')});
-        } else {
-            console.error("Socket non initialisé");
+            socket.emit("create_game", { idUser: localStorage.getItem("id") });
         }
     }
 
     function joinRoom() {
-        if( party !== ""){
+        if (party !== "") {
             if (socket) {
-                socket.emit("join_game", { idUser : localStorage.getItem('id'), gameId : party });
-            } else {
-                console.error("Socket non initialisé");
+                socket.emit("join_game", { idUser: localStorage.getItem("id"), gameId: party });
             }
         }
     }
