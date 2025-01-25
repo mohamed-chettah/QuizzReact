@@ -1,17 +1,23 @@
 import {useNavigate, useParams} from 'react-router-dom';
-import {useEffect, useState} from 'react';
-import {useSocket} from "../context/SocketContext.tsx";
+import {useContext, useEffect, useState} from 'react';
+import {SocketContext} from "../context/SocketContext.tsx";
 
 function WaitingParty() {
     const { id } =  useParams<{ id: string }>();
     const [buttonText, setButtonText] = useState('Copier');
-    const socket = useSocket(); // Récupère l'instance globale de Socket.IO
+    const socketContext = useContext(SocketContext);
+
+    if (!socketContext) {
+        throw new Error("SocketContext must be used within a SocketProvider");
+    }
+
+    const { socket, subscribeToEvent, unsubscribeFromEvent, sendEvent } = socketContext;
     const navigate = useNavigate()
 
     // Si joiningParty on lance la partie sur les deux clients
     useEffect(() => {
         if (socket) {
-            socket.on('game_ready', (data: any) => {
+            subscribeToEvent("game_ready", (data: any) => {
                 navigate(`/game/${data.idGame}`);
             })
         }

@@ -22,6 +22,24 @@ export async function getGame(request) {
 	return game.dataValues;
 }
 
+export async function getGamewithPlayers(request) {
+	const { gameId } = request.params;
+	if (!gameId) {
+		return {error: "L'identifiant de la partie est manquant"};
+	}
+	const game = await Game.findByPk(gameId, {
+		include: [
+			{ model: User, as: "player1", attributes: ["id", "username"] },
+			{ model: User, as: "player2", attributes: ["id", "username"] },
+		],
+	});
+	if (!game) {
+		return {error: "La partie n'existe pas."};
+	}
+
+	return game.dataValues;
+}
+
 export async function updateGame(request) {
 	const { action, gameId } = request.params;
 	 if (!gameId) {

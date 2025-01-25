@@ -9,7 +9,7 @@ import fastifyJWT from "@fastify/jwt";
 // bdd
 import { sequelize } from "./bdd.js"; // D'abord, on importe Sequelize
 import socketioServer from "fastify-socket.io"
-import {createGame, getGame, updateGame} from "./controllers/games.js";
+import {createGame, getGame, getGamewithPlayers, updateGame} from "./controllers/games.js";
 // ✅ Importer les modèles APRES avoir importé `sequelize`
 import Game from "./models/games.js";
 import Manche from "./models/manches.js";
@@ -96,6 +96,7 @@ await app
  **********/
 import { usersRoutes } from "./routes/users.js";
 import { gamesRoutes } from "./routes/games.js";
+import {json} from "sequelize";
 
 // Fonction pour décoder et vérifier le token
 app.decorate("authenticate", async (request, reply) => {
@@ -155,7 +156,6 @@ app.io.on("connection", (socket) => {
 
 	// Lorsqu'un joueur crée une partie
 	socket.on("create_game", (playerData) => {
-		console.log("create_game", playerData);
 		// Créer une room unique pour cette partie (par exemple avec l'ID du socket ou un identifiant unique généré)
 		const gameId = `game_${socket.id}`;
 
@@ -172,11 +172,12 @@ app.io.on("connection", (socket) => {
 
 		// créate game in db
 		createGame(games[gameId]).then(r => {
-			console.log(r);
+
 		});
 
 		// Notifier le créateur que la partie est en attente d'un second joueur et envoi l'id de la partie
 		socket.emit("game_created", { idGame : gameId, message: "Partie créée, en attente d'un second joueur..." });
+		console.log("create_game", "La partie à bien été créé : " + gameId);
 	});
 
 	// Lorsqu'un second joueur rejoint une partie existante
@@ -209,24 +210,22 @@ app.io.on("connection", (socket) => {
 					game: gameUpdated,
 					message: "Les deux joueurs sont connectés. La partie peut commencer !"
 				});
+				console.log("join_game", "Le joueur à bien rejoint la partie : " + gameId);
 			} else {
 				socket.emit("game_full", { message: "La partie est déjà pleine." });
+				console.log("join_game", "La partie est déjà pleine : " + gameId);
 			}
 		} else {
 			socket.emit("game_not_found", { message: "La partie n'existe pas." });
+			console.log("join_game", "La partie n'existe pas : " + gameId);
 		}
 	});
 
 	// Récuperation des infos de la partie
 	socket.on("get_game_state", async (gameId) => {
-
-
-		console.log("get_game_state : " + gameId);
-		console.log(`game_${socket.id}` + "get_game_state" + gameId)
-
-
+		console.log("get_game_state", "Récupération des infos de la partie : " + gameId);
 		if (gameId) {
-			const game = await getGame({params: {gameId}}).then(r => {
+			const game = await getGamewithPlayers({params: {gameId}}).then(r => {
 				return r;
 			});
 
@@ -234,10 +233,12 @@ app.io.on("connection", (socket) => {
 				socket.emit("error", {message: "La partie n'existe pas."});
 				return;
 			}
-			socket.emit("game_state", {game});
+			app.io.to(gameId).emit("game_state", game);
+			console.log("get_game_state", "Récupération des infos de la partie : " + gameId);
 		}
 		else {
 			socket.emit("error", {message: "L'identifiant de la partie est incorrect."});
+			console.log("get_game_state", "L'identifiant de la partie est incorrect : " + gameId);
 		}
 
 	});
@@ -250,7 +251,8 @@ app.io.on("connection", (socket) => {
 
 	// Gérer la déconnexion
 	socket.on("disconnect", () => {
-		console.log("disconnect", socket.id);
+		console.log("déconnexion", socket.id);
+		// TODO préveneir la room que le joueur s'est déconnecté et mettre à jour la partie (mettre fin)
 		// Optionnel : Gérer la logique pour retirer un joueur déconnecté d'une partie en cours
 	});
 });

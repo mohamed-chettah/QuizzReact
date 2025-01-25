@@ -1,15 +1,20 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {useSocket} from "../context/SocketContext.tsx";
+import {SocketContext} from "../context/SocketContext.tsx";
 
 export default function Dashboard() {
     const navigate = useNavigate();
     const [party, setParty] = useState("");
-    const socket = useSocket();
+
+    const socketContext = useContext(SocketContext);
+
+    if (!socketContext) {
+        throw new Error("SocketContext must be used within a SocketProvider");
+    }
+
+    const { socket, subscribeToEvent, unsubscribeFromEvent, sendEvent } = socketContext;
 
     useEffect(() => {
-        if (!socket) return;
-
         // Define the handler callbacks:
         const handleGameCreated = (data: any) => {
             navigate(`/waiting/${data.idGame}`);
@@ -19,27 +24,38 @@ export default function Dashboard() {
             navigate(`/game/${data.idGame}`);
         };
 
-        // Attach listeners
-        socket.on("game_created", handleGameCreated);
-        socket.on("game_ready", handleGameReady);
+        const gameFull = () => {
+            alert("La partie est pleine");
+        }
+
+        const gameNotFound = () => {
+            alert("La partie n'existe pas");
+        }
+
+        subscribeToEvent("game_created", handleGameCreated);
+        subscribeToEvent("game_ready", handleGameReady);
+        subscribeToEvent("game_full", gameFull);
+        subscribeToEvent("game_not_found", gameNotFound);
 
         // Cleanup: remove the listeners on unmount or re-render
         return () => {
-            socket.off("game_created", handleGameCreated);
-            socket.off("game_ready", handleGameReady);
+            unsubscribeFromEvent("game_created", handleGameCreated);
+            unsubscribeFromEvent("game_ready", handleGameReady);
+            unsubscribeFromEvent("game_full", gameFull);
+            unsubscribeFromEvent("game_not_found", gameNotFound);
         };
     }, [socket, navigate]); // <= Add the dependency array
 
     function createRoom() {
         if (socket) {
-            socket.emit("create_game", { idUser: localStorage.getItem("id") });
+            sendEvent("create_game", { idUser: localStorage.getItem("id") });
         }
     }
 
     function joinRoom() {
         if (party !== "") {
             if (socket) {
-                socket.emit("join_game", { idUser: localStorage.getItem("id"), gameId: party });
+                sendEvent("join_game", { idUser: localStorage.getItem("id"), gameId: party });
             }
         }
     }
@@ -59,7 +75,7 @@ export default function Dashboard() {
                             <button
                                 className={"flex gap-1 xl:flex-row flex-col dark:border-white border-[1px] border-black-400 items-center dark:text-black text-white"}
                                 onClick={createRoom}>
-                                <img className={"xl:w-12 w-8 "} src="/quizup-logo-removebg-preview.png"/><p
+                                <img className={"xl:w-12 w-8 "} src="/quizup-logo-removebg-preview.png" /><p
                                 className={"xl:text-md text-sm text-black"}>Créer une partie </p>
                             </button>
 
@@ -79,9 +95,6 @@ export default function Dashboard() {
 
                     </div>
 
-                    {/* Image + input et champ rejoindre party */}
-
-                    {/* Créé party */}
 
                     {/* Classement - Recap des match jouer */}
 
