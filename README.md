@@ -29,7 +29,7 @@ git clone https://github.com/mohamed-chettah/QuizzReact.git
 ### 📥 2. Installer le backend
 ```bash
 cd backend-fastify
-récuperer les datasset dans le dossier seeders et les importer dans votre base de données
+récuperer les datasset dans le dossier seeders et les importer dans votre base de données 
 créé le .env
 npm install
 npm run dev

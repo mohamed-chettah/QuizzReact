@@ -10,6 +10,7 @@ import fastifyJWT from "@fastify/jwt";
 import { sequelize } from "./bdd.js"; // D'abord, on importe Sequelize
 import socketioServer from "fastify-socket.io"
 import {createGame, getGame, getGamewithPlayers, updateGame} from "./controllers/games.js";
+import {getQuestionForParty} from "./controllers/questions.js";
 // ✅ Importer les modèles APRES avoir importé `sequelize`
 import Game from "./models/games.js";
 import Manche from "./models/manches.js";
@@ -244,8 +245,15 @@ app.io.on("connection", (socket) => {
 	});
 
 	// TODO Envoi des questions
+	socket.on("get_questions", async (gameId) => {
+		// Récupérer les questions pour la partie
+		const questions = await getQuestionForParty();
 
-	// TODO Réception des réponses
+		// Envoyer les questions aux joueurs
+		app.io.to(gameId).emit("questions_party", questions);
+	});
+
+	// TODO Réception des réponses de chaque joueur + calcul des points
 
 	// TODO Fin de la partie
 
