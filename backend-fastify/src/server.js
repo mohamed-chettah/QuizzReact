@@ -158,7 +158,7 @@ app.io.on("connection", (socket) => {
 	// Lorsqu'un joueur crée une partie
 	socket.on("create_game", (playerData) => {
 		// Créer une room unique pour cette partie (par exemple avec l'ID du socket ou un identifiant unique généré)
-		const gameId = `game_${socket.id}`;
+		const gameId = `game_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
 
 		// Rejoint la Room
 		socket.join(gameId);
