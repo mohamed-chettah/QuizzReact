@@ -253,13 +253,35 @@ app.io.on("connection", (socket) => {
 		app.io.to(gameId).emit("questions_party", questions);
 	});
 
-	// TODO Réception des réponses de chaque joueur + calcul des points
+	const calculateScore = (timeLeft, correct) => {
+		const baseScore = timeLeft * 10; // 10 points par seconde restante
+		return correct ? baseScore : 0; // Score uniquement si la réponse est correcte
+	};
 
-	// TODO Fin de la partie
+	// TODO Réception des réponses de chaque joueur + calcul des points + tableau timer
+	socket.on("submit_answer", async (data) => {
+		const { gameId, playerId, question ,answer, timeLeft } = data;
+		const game = games[gameId];
+
+		// Vérifier si la réponse est correcte
+		const correct = answer === question.bonne_reponse;
+
+		// Calculer le score
+		const score = calculateScore(timeLeft, correct);
+
+		// todo SAVE de la manche en BDD
+
+
+		// Envoyer le score et résultat à tous les joueurs
+		app.io.to(gameId).emit("player_score_result", { playerId, score, correct });
+
+	});
+
+	// TODO Fin de la partie on recupere l'ensemble des points des manches de la game on vérifie qui en a le plus : winner
 
 	// Gérer la déconnexion
-	socket.on("disconnect", () => {
-		console.log("déconnexion", socket.id);
+	socket.on("disconnect", (data) => {
+		console.log("déconnexion", data);
 		// TODO préveneir la room que le joueur s'est déconnecté et mettre à jour la partie (mettre fin)
 		// Optionnel : Gérer la logique pour retirer un joueur déconnecté d'une partie en cours
 	});

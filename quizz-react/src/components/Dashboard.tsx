@@ -98,30 +98,28 @@ export default function Dashboard() {
 
                     {/* Classement - Recap des match jouer */}
 
-                    {/*<div>*/}
-                    {/*    <h3 className={"font-bold"}>Classement Party :</h3>*/}
-                    {/*    <table className={"mt-5"}>*/}
-                    {/*        <thead>*/}
-                    {/*        <tr>*/}
-                    {/*            <th>Party</th>*/}
-                    {/*            <th>Créateur</th>*/}
-                    {/*            <th>Rejoindre</th>*/}
-                    {/*        </tr>*/}
-                    {/*        </thead>*/}
-                    {/*        <tbody>*/}
-                    {/*        <tr>*/}
-                    {/*            <td>Party 1</td>*/}
-                    {/*            <td>John Doe</td>*/}
-                    {/*            <td><button className={"dark:text-black text-white"}>Rejoindre</button></td>*/}
-                    {/*        </tr>*/}
-                    {/*        <tr>*/}
-                    {/*            <td>Party 2</td>*/}
-                    {/*            <td>Jane Doe</td>*/}
-                    {/*            <td><button className={"dark:text-black text-white"}>Rejoindre</button></td>*/}
-                    {/*        </tr>*/}
-                    {/*        </tbody>*/}
-                    {/*    </table>*/}
-                    {/*</div>*/}
+                    <div>
+                        <h3 className={"font-bold"}>Classement Party :</h3>
+                        <table className={"mt-5"}>
+                            <thead>
+                            <tr>
+                                <th>Party</th>
+                                <th>Créateur</th>
+                                <th>Rejoindre</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Party 1</td>
+                                <td>John Doe</td>
+                            </tr>
+                            <tr>
+                                <td>Party 2</td>
+                                <td>Jane Doe</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
