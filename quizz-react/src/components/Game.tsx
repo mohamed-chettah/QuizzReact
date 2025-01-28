@@ -177,13 +177,16 @@ function Game() {
     const handleAnswer = (selectedAnswer: string) => {
         console.log("📤 Réponse soumise:", selectedAnswer);
 
+        // TODO question 10 les points compte double
+
         // Envoyer la réponse au serveur via Socket.IO
         sendEvent("submit_answer", {
-            userId: localStorage.getItem("id"),
+            playerId: localStorage.getItem("id"),
             gameId: id,
             question: questions[currentQuestionIndex],
             answer: selectedAnswer,
-            timer: timer
+            timer: timer,
+            isPlayer1: player1.id === localStorage.getItem("id")
         });
 
 
@@ -193,16 +196,28 @@ function Game() {
 
     };
 
-    const setColorScore = (colorPlayer1 : boolean, colorPlayer2 : boolean, reset : boolean = false) => {
+    const setColorScore = (
+        colorPlayer1: boolean,
+        colorPlayer2: boolean,
+        isWrongPlayer1: boolean = false,
+        isWrongPlayer2: boolean = false,
+        reset: boolean = false
+    ) => {
         if (reset) {
-            document.querySelector(".score-player1")?.classList.remove("bg-green-500");
-            document.querySelector(".score-player2")?.classList.remove("bg-green-500");
+            document.querySelector(".score-player1")?.classList.remove("text-green-500", "text-red-500");
+            document.querySelector(".score-player2")?.classList.remove("text-green-500", "text-red-500");
         }
 
-        if (colorPlayer1) {
-            document.querySelector(".score-player1")?.classList.add("bg-green-500");
+        if (isWrongPlayer1) {
+            document.querySelector(".score-player1")?.classList.add("text-red-500");
+        } else if (colorPlayer1) {
+            document.querySelector(".score-player1")?.classList.add("text-green-500");
+        }
+
+        if (isWrongPlayer2) {
+            document.querySelector(".score-player2")?.classList.add("text-red-500");
         } else if (colorPlayer2) {
-            document.querySelector(".score-player2")?.classList.add("bg-green-500");
+            document.querySelector(".score-player2")?.classList.add("text-green-500");
         }
     }
 
@@ -216,22 +231,40 @@ function Game() {
         const handlePlayerScoreResult = (data: any) => {
             console.log("🔹 Event player_score_result received:", data);
 
-            // coloré en vert la bonne réponse
-            if (data.idPlayer === player1.id) {
-                setColorScore(true, false, false);
+            if(data){
+                // coloré en vert la bonne réponse
+                if (data.playerId === player1.id && data.correct) {
+                    setColorScore(true, false, false);
+                }
+                else if (data.playerId === player2.id && data.correct) {
+                    setColorScore(false, true, false);
+                }
+
+                if (data.playerId === player1.id) {
+                    setPlayer1((prev) => ({
+                        ...prev,
+                        score: prev.score + data.score
+                    }));
+                    if(data.correct){
+                        setColorScore(true, false, false);
+                    }
+                    else {
+                        setColorScore(false, false, true);
+                    }
+                } else {
+                    if(data.correct){
+                        setColorScore(false, true, false);
+                    }
+                    else {
+                        setColorScore(false, false, false, true);
+                    }
+                    setPlayer2((prev) => ({
+                        ...prev,
+                        score: prev.score + data.score
+                    }));
+                }
             }
 
-            if (data.idPlayer === player1.id) {
-                setPlayer1((prev) => ({
-                    ...prev,
-                    score: prev.score + data.point
-                }));
-            } else {
-                setPlayer2((prev) => ({
-                    ...prev,
-                    score: prev.score + data.point
-                }));
-            }
 
         };
 
@@ -247,13 +280,19 @@ function Game() {
 
     // Mettre un watcher pour sur timer lorsqu'il est a zero
     useEffect(() => {
-        if (timer === 0) {
-            setpanelWaiter(true);
-            setTimeout(() => {
-                setpanelWaiter(false);
-                setcurrentQuestionIndex(currentQuestionIndex + 1);
-                launchTimer()
-            }, 2000);
+        if (currentQuestionIndex <= questions.length) {
+            if (timer === 0) {
+                setpanelWaiter(true);
+                setColorScore(false, false, false, false, true)
+                setTimeout(() => {
+                    setpanelWaiter(false);
+                    setcurrentQuestionIndex(currentQuestionIndex + 1);
+                    launchTimer()
+                }, 2000);
+            }
+        }
+        else {
+            // TODO afficher le gagnant
         }
     }, [timer]);
 
@@ -304,8 +343,14 @@ function Game() {
                         {panelWaiter ? (
                             /* Affichage de l'overlay Naruto si panelWaiter est actif */
                             <div
-                                className="absolute inset-0 flex justify-center items-center bg-black z-50 animate-fadeIn">
-                                <img src="/naruto.jpg" alt="Chargement..." className="w-64 h-64"/>
+                                className="absolute inset-0 flex flex-col gap-3 justify-center items-center bg-black z-50 animate-fadeIn">
+                                <img src="/naruto.jpg" alt="Chargement..." className="w-32 h-32"/>
+
+                                <p className={"text-sm text-white"}> Naruto </p>
+
+                                <p className={"text-2xl text-white"}>
+                                    Round { currentQuestionIndex + 1 } sur { questions.length }
+                                </p>
                             </div>
                         ) : (
                             /* Affichage des questions si panelWaiter est désactivé */

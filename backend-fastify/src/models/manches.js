@@ -7,7 +7,7 @@ const Manche = sequelize.define("Manche", {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true, // Ajoute auto-increment si l'id est un integer
+        autoIncrement: true,
     },
     gameId: {
         type: DataTypes.STRING,

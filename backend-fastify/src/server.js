@@ -98,6 +98,7 @@ await app
 import { usersRoutes } from "./routes/users.js";
 import { gamesRoutes } from "./routes/games.js";
 import {json} from "sequelize";
+import {createManche, getMancheByGameIdAndQuestionId} from "./controllers/manches.js";
 
 // Fonction pour décoder et vérifier le token
 app.decorate("authenticate", async (request, reply) => {
@@ -260,20 +261,61 @@ app.io.on("connection", (socket) => {
 
 	// TODO Réception des réponses de chaque joueur + calcul des points + tableau timer
 	socket.on("submit_answer", async (data) => {
-		const { gameId, playerId, question ,answer, timeLeft } = data;
-		const game = games[gameId];
+		const { gameId, playerId, question ,answer, timer, isPlayer1} = data;
 
 		// Vérifier si la réponse est correcte
 		const correct = answer === question.bonne_reponse;
 
 		// Calculer le score
-		const score = calculateScore(timeLeft, correct);
+		// TODO : si question 7 les points compte double
+		const score = calculateScore(timer, correct);
 
-		// todo SAVE de la manche en BDD
+		// Si la manche existe déjà, on la met à jour sinon on la créé
+		let manche = await getMancheByGameIdAndQuestionId(gameId, question.id)
 
+		if(manche){
+			if(isPlayer1){
+				manche.player1Point = score;
+				manche.player1Rep = answer;
+			}
+			else {
+				manche.player2Point = score;
+				manche.player2Rep = answer;
+			}
+			manche.save();
+		}
+		else {
+			if(isPlayer1){
+				manche = await createManche(
+					{
+						gameId: gameId,
+						questionId: question.id,
+						player1Point: score,
+						player1Rep: answer,
+					}
+				).then(r => {
+					return r;
+				})
+			}
+			else {
+				manche = await createManche(
+					{
+						gameId: gameId,
+						questionId: question.id,
+						player2Point: score,
+						player2Rep: answer,
+					}
+				).then(r => {
+					return r
+				})
+			}
+
+		}
+
+		console.log(manche)
 
 		// Envoyer le score et résultat à tous les joueurs
-		app.io.to(gameId).emit("player_score_result", { playerId, score, correct });
+		app.io.to(gameId).emit("player_score_result",{ manche : manche, playerId : playerId, score : score, correct : correct });
 
 	});
 
