@@ -28,7 +28,7 @@ export type Question = {
     rep2: string;
     rep3: string;
     rep4: string;
-    bonneReponse: string;
+    bonne_reponse: string;
     photo?: string;
 };
 
@@ -62,7 +62,10 @@ function Game() {
     const [timer, setTimer] = useState(10);
     const [displayPlayers, setdisplayPlayers] = useState(false);
     const [panelWaiter, setpanelWaiter] = useState(false);
-    const [currentQuestionIndex, setcurrentQuestionIndex] = useState(0);
+    const [currentQuestionIndex, setcurrentQuestionIndex] = useState(1);
+    const [playerAnswered, setPlayerAnswered] = useState(false);
+    const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+    const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
 
     useEffect(() => {
         if (!socket || !id) return;
@@ -175,24 +178,19 @@ function Game() {
 
     // ✅ Gestion de la réponse à une question
     const handleAnswer = (selectedAnswer: string) => {
-        console.log("📤 Réponse soumise:", selectedAnswer);
-
-        // TODO question 10 les points compte double
-
+        setPlayerAnswered(true);
+        setSelectedAnswer(selectedAnswer); // Stocke la réponse choisie par le joueur
+        setCorrectAnswer(questions[currentQuestionIndex - 1].bonne_reponse);
         // Envoyer la réponse au serveur via Socket.IO
         sendEvent("submit_answer", {
             playerId: localStorage.getItem("id"),
             gameId: id,
-            question: questions[currentQuestionIndex],
+            question: questions[currentQuestionIndex - 1],
             answer: selectedAnswer,
             timer: timer,
-            isPlayer1: player1.id === localStorage.getItem("id")
+            isPlayer1: player1.id === localStorage.getItem("id"),
+            isLastQuestion: currentQuestionIndex === questions.length - 1
         });
-
-
-        // On affiche le panel de chargement à la fin du temp alloué pour répondre
-
-        // Passer à la question suivante après 2s (simule une attente de validation)
 
     };
 
@@ -220,7 +218,6 @@ function Game() {
             document.querySelector(".score-player2")?.classList.add("text-green-500");
         }
     }
-
 
     // ✅ Gestion de l'événement "player_score_result"
     // TODO si l'id du joueur est égal à celui de player1, on met à jour le score de player1 et on lui donne ça bonne réponse
@@ -280,12 +277,14 @@ function Game() {
 
     // Mettre un watcher pour sur timer lorsqu'il est a zero
     useEffect(() => {
-        if (currentQuestionIndex <= questions.length) {
+
+        if (currentQuestionIndex < questions.length) {
             if (timer === 0) {
                 setpanelWaiter(true);
                 setColorScore(false, false, false, false, true)
                 setTimeout(() => {
                     setpanelWaiter(false);
+                    setPlayerAnswered(false);
                     setcurrentQuestionIndex(currentQuestionIndex + 1);
                     launchTimer()
                 }, 2000);
@@ -295,7 +294,6 @@ function Game() {
             // TODO afficher le gagnant
         }
     }, [timer]);
-
 
 
     return (
@@ -344,7 +342,7 @@ function Game() {
                             /* Affichage de l'overlay Naruto si panelWaiter est actif */
                             <div
                                 className="absolute inset-0 flex flex-col gap-3 justify-center items-center bg-black z-50 animate-fadeIn">
-                                <img src="/naruto.jpg" alt="Chargement..." className="w-32 h-32"/>
+                                <img src="/naruto.jpg" alt="Chargement..." className="w-64 h-80"/>
 
                                 <p className={"text-sm text-white"}> Naruto </p>
 
@@ -356,24 +354,28 @@ function Game() {
                             /* Affichage des questions si panelWaiter est désactivé */
                             <div className="flex flex-col gap-10 mt-10 w-full max-w-3xl text-center">
                                 {/* Gestion du chargement des questions */}
-                                {questions.length === 0 ? (
+                                {questions.length === 0 || questions.length <= currentQuestionIndex? (
                                     <p className="text-white">Chargement des questions...</p>
                                 ) : (
                                     <div className="flex flex-col gap-10">
                                         {/* Affichage de la question */}
                                         <p className="question text-4xl text-white">
-                                            {questions[currentQuestionIndex].labelQuestion}
+                                            {questions[currentQuestionIndex - 1].labelQuestion}
                                         </p>
 
                                         {/* Boutons de réponse */}
                                         <div className="flex flex-col text-2xl gap-4">
-                                            {[questions[currentQuestionIndex].rep1,
-                                                questions[currentQuestionIndex].rep2,
-                                                questions[currentQuestionIndex].rep3,
-                                                questions[currentQuestionIndex].rep4].map((rep, index) => (
+                                            {[questions[currentQuestionIndex - 1].rep1,
+                                                questions[currentQuestionIndex - 1].rep2,
+                                                questions[currentQuestionIndex - 1].rep3,
+                                                questions[currentQuestionIndex - 1].rep4].map((rep, index) => (
                                                 <button
                                                     key={index}
-                                                    className="btn-reponse transition duration-300 hover:bg-gray-700"
+                                                    disabled={playerAnswered} // Désactive après réponse
+                                                    className={`btn-reponse transition duration-300 hover:bg-gray-700
+                                                    ${playerAnswered && rep === correctAnswer ? "bg-green-500 text-white" : ""}
+                                                    ${playerAnswered && rep === selectedAnswer && rep !== correctAnswer ? "bg-red-500 text-white" : ""}
+                                                     `}
                                                     onClick={() => handleAnswer(rep)}
                                                 >
                                                     {rep}
@@ -391,4 +393,5 @@ function Game() {
         </section>
     );
 }
+
 export default Game;

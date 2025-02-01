@@ -179,7 +179,6 @@ app.io.on("connection", (socket) => {
 
 		// Notifier le créateur que la partie est en attente d'un second joueur et envoi l'id de la partie
 		socket.emit("game_created", { idGame : gameId, message: "Partie créée, en attente d'un second joueur..." });
-		console.log("create_game", "La partie à bien été créé : " + gameId);
 	});
 
 	// Lorsqu'un second joueur rejoint une partie existante
@@ -212,20 +211,16 @@ app.io.on("connection", (socket) => {
 					game: gameUpdated,
 					message: "Les deux joueurs sont connectés. La partie peut commencer !"
 				});
-				console.log("join_game", "Le joueur à bien rejoint la partie : " + gameId);
 			} else {
 				socket.emit("game_full", { message: "La partie est déjà pleine." });
-				console.log("join_game", "La partie est déjà pleine : " + gameId);
 			}
 		} else {
 			socket.emit("game_not_found", { message: "La partie n'existe pas." });
-			console.log("join_game", "La partie n'existe pas : " + gameId);
 		}
 	});
 
 	// Récuperation des infos de la partie
 	socket.on("get_game_state", async (gameId) => {
-		console.log("get_game_state", "Récupération des infos de la partie : " + gameId);
 		if (gameId) {
 			const game = await getGamewithPlayers({params: {gameId}}).then(r => {
 				return r;
@@ -236,16 +231,13 @@ app.io.on("connection", (socket) => {
 				return;
 			}
 			app.io.to(gameId).emit("game_state", game);
-			console.log("get_game_state", "Récupération des infos de la partie : " + gameId);
 		}
 		else {
 			socket.emit("error", {message: "L'identifiant de la partie est incorrect."});
-			console.log("get_game_state", "L'identifiant de la partie est incorrect : " + gameId);
 		}
 
 	});
 
-	// TODO Envoi des questions
 	socket.on("get_questions", async (gameId) => {
 		// Récupérer les questions pour la partie
 		const questions = await getQuestionForParty();
@@ -254,31 +246,34 @@ app.io.on("connection", (socket) => {
 		app.io.to(gameId).emit("questions_party", questions);
 	});
 
-	const calculateScore = (timeLeft, correct) => {
+	const calculateScore = (timeLeft, correct, isLastQuestion) => {
 		const baseScore = timeLeft * 10; // 10 points par seconde restante
+		if(isLastQuestion){
+			return correct ? baseScore * 2 : 0; // Score double si c'est la dernière question
+		}
 		return correct ? baseScore : 0; // Score uniquement si la réponse est correcte
 	};
 
 	// TODO Réception des réponses de chaque joueur + calcul des points + tableau timer
 	socket.on("submit_answer", async (data) => {
-		const { gameId, playerId, question ,answer, timer, isPlayer1} = data;
+		const { gameId, playerId, question ,answer, timer, isPlayer1, isLastQuestion} = data;
 
 		// Vérifier si la réponse est correcte
 		const correct = answer === question.bonne_reponse;
 
 		// Calculer le score
 		// TODO : si question 7 les points compte double
-		const score = calculateScore(timer, correct);
+		const score = calculateScore(timer, correct, isLastQuestion);
 
 		// Si la manche existe déjà, on la met à jour sinon on la créé
 		let manche = await getMancheByGameIdAndQuestionId(gameId, question.id)
 
 		if(manche){
-			if(isPlayer1){
+			if(isPlayer1 && manche.player1Rep == null){
 				manche.player1Point = score;
 				manche.player1Rep = answer;
 			}
-			else {
+			else if(manche.player2Rep == null){
 				manche.player2Point = score;
 				manche.player2Rep = answer;
 			}
@@ -311,9 +306,6 @@ app.io.on("connection", (socket) => {
 			}
 
 		}
-
-		console.log(manche)
-
 		// Envoyer le score et résultat à tous les joueurs
 		app.io.to(gameId).emit("player_score_result",{ manche : manche, playerId : playerId, score : score, correct : correct });
 
