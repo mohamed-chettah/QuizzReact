@@ -67,10 +67,6 @@ export async function updateGame(request) {
 			break;
 		case "finish":
 			game.state = "finished";
-			if (!request.body.score) {
-				return { error: "Le score est manquant." };
-			}
-			game.winnerScore = request.body.score;
 			game.winner = request.body.winner;
 			break;
 		default:

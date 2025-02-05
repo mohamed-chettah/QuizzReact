@@ -66,6 +66,7 @@ function Game() {
     const [playerAnswered, setPlayerAnswered] = useState(false);
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
     const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
+    const [partyIsFinish, setPartyIsFinish] = useState(false);
 
     useEffect(() => {
         if (!socket || !id) return;
@@ -219,9 +220,6 @@ function Game() {
         }
     }
 
-    // ✅ Gestion de l'événement "player_score_result"
-    // TODO si l'id du joueur est égal à celui de player1, on met à jour le score de player1 et on lui donne ça bonne réponse
-    // TODO sinon on met à jour le score de player2 et on lui donne ça bonne réponse et son point
     useEffect(() => {
         if (!socket) return;
 
@@ -273,10 +271,19 @@ function Game() {
         };
     }, [socket, subscribeToEvent, unsubscribeFromEvent, player1.id]);
 
-
-
     // Mettre un watcher pour sur timer lorsqu'il est a zero
     useEffect(() => {
+        const displayResultParty = (data: any) => {
+            setPartyIsFinish(true);
+
+            if(data){
+                if (data.winner === player1.id) {
+                    setColorScore(true, false, false);
+                } else {
+                    setColorScore(false, true, false);
+                }
+            }
+        }
 
         if (currentQuestionIndex < questions.length) {
             if (timer === 0) {
@@ -290,14 +297,18 @@ function Game() {
                 }, 2000);
             }
         }
-        else {
-            // TODO afficher le gagnant
+        else if(questions.length > 0) {
+            sendEvent("end_game", id)
+            subscribeToEvent("game_end", displayResultParty);
         }
+
+        return () => {
+            unsubscribeFromEvent("game_end", displayResultParty);
+        };
     }, [timer]);
 
-
     return (
-        <section className="flex flex-col gap-16 p-4 bg-black min-h-screen">
+        <section className="flex items-center flex-col gap-16 p-4 bg-black py-10">
 
             {/* Affichage des joueurs avant de commencer */}
             {displayPlayers ? (
@@ -319,10 +330,17 @@ function Game() {
                             isPlayer2={false}
                         />
 
-                        <div className="text-blue-400 flex flex-col gap-1 text-center">
-                            <p className="text-[10px]">TEMP RESTANT</p>
-                            <p className="font-bold">{timer}</p>
-                        </div>
+                        {
+                            !partyIsFinish ? (
+                            <div className="text-blue-400 flex flex-col gap-1 text-center">
+                                <p className="text-[10px]">TEMP RESTANT</p>
+                                <p className="font-bold">{timer}</p>
+                            </div>
+                                ) :
+                                (
+                                    <p></p>
+                                )
+                        }
 
                         <PlayerCircle
                             player={{
@@ -335,16 +353,42 @@ function Game() {
                         />
                     </div>
 
-                    {/* Conteneur des questions avec animation de Naruto en overlay */}
+
+
+
+                    {
+                        partyIsFinish ? (
+                            <div className={"text-white mt-10"}>
+                                <p>La partie est terminée</p>
+
+                                <p>
+                                    Le gagnant est {player1.score > player2.score ? player1.username : player2.username}
+                                </p>
+                            </div>
+                        ) : (
+
                     <div className="relative w-full flex justify-center items-center min-h-[400px]">
 
                         {panelWaiter ? (
                             /* Affichage de l'overlay Naruto si panelWaiter est actif */
                             <div
                                 className="absolute inset-0 flex flex-col gap-3 justify-center items-center bg-black z-50 animate-fadeIn">
-                                <img src="/naruto.jpg" alt="Chargement..." className="w-64 h-80"/>
+                                <img src="/naruto.jpg" alt="Chargement..." className="mt-10 w-52 h-72"/>
 
                                 <p className={"text-sm text-white"}> Naruto </p>
+
+
+                                {questions.length == currentQuestionIndex ? (
+                                    <p>
+                                        Question Bonus !
+                                    </p>
+                                    )
+                                    :
+                                    (
+                                        <p></p>
+                                    )
+                                }
+
 
                                 <p className={"text-2xl text-white"}>
                                     Round { currentQuestionIndex + 1 } sur { questions.length }
@@ -354,12 +398,13 @@ function Game() {
                             /* Affichage des questions si panelWaiter est désactivé */
                             <div className="flex flex-col gap-10 mt-10 w-full max-w-3xl text-center">
                                 {/* Gestion du chargement des questions */}
-                                {questions.length === 0 || questions.length <= currentQuestionIndex? (
+                                {questions.length === 0 || questions.length < currentQuestionIndex ? (
                                     <p className="text-white">Chargement des questions...</p>
                                 ) : (
                                     <div className="flex flex-col gap-10">
                                         {/* Affichage de la question */}
                                         <p className="question text-4xl text-white">
+                                            { currentQuestionIndex }
                                             {questions[currentQuestionIndex - 1].labelQuestion}
                                         </p>
 
@@ -388,6 +433,8 @@ function Game() {
                         )}
                     </div>
 
+                        )
+                    }
                 </div>
             )}
         </section>

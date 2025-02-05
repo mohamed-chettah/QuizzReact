@@ -254,7 +254,6 @@ app.io.on("connection", (socket) => {
 		return correct ? baseScore : 0; // Score uniquement si la réponse est correcte
 	};
 
-	// TODO Réception des réponses de chaque joueur + calcul des points + tableau timer
 	socket.on("submit_answer", async (data) => {
 		const { gameId, playerId, question ,answer, timer, isPlayer1, isLastQuestion} = data;
 
@@ -262,7 +261,6 @@ app.io.on("connection", (socket) => {
 		const correct = answer === question.bonne_reponse;
 
 		// Calculer le score
-		// TODO : si question 7 les points compte double
 		const score = calculateScore(timer, correct, isLastQuestion);
 
 		// Si la manche existe déjà, on la met à jour sinon on la créé
@@ -311,7 +309,41 @@ app.io.on("connection", (socket) => {
 
 	});
 
-	// TODO Fin de la partie on recupere l'ensemble des points des manches de la game on vérifie qui en a le plus : winner
+	socket.on("end_game", async (gameId) => {
+		const game = await getGamewithPlayers({params: {gameId}}).then(r => {
+			return r;
+		});
+		if (game) {
+			const manches = await Manche.findAll({where: {gameId: gameId}});
+			let player1Score = 0;
+			let player2Score = 0;
+			manches.forEach(manche => {
+					player1Score += manche.player1Point;
+					player2Score += manche.player2Point;
+				}
+			);
+			let winner = null;
+			if (player1Score > player2Score) {
+				winner = game.player1Id;
+			} else if (player1Score < player2Score) {
+				winner = game.player2Id;
+			} else {
+				winner = "egalite";
+			}
+
+			// Mettre à jour la partie en BDD
+			await updateGame({params: {action: "finish", gameId: gameId}, body: { state: 'finished', winner : winner}
+			}).then(r => {
+				return r;
+			});
+			app.io.to(gameId).emit("game_end", {
+				winner: winner,
+				player1Score: player1Score,
+				player2Score: player2Score
+			});
+		}
+	})
+
 
 	// Gérer la déconnexion
 	socket.on("disconnect", (data) => {
