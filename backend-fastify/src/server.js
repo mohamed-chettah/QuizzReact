@@ -276,6 +276,9 @@ app.io.on("connection", (socket) => {
 				manche.player2Rep = answer;
 			}
 			manche.save();
+
+			// On prévient l'autre joueur que tout le monde à répondu donc on passe à la question suivante
+			app.io.to(gameId).emit("next_question");
 		}
 		else {
 			if(isPlayer1){
