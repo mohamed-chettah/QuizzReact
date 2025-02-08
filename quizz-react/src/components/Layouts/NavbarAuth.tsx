@@ -18,6 +18,7 @@ export default function NavbarAuth() {
         navigate('/');
     }
 
+    const username = localStorage.getItem('username');
 
     return (
         <Disclosure as="nav" className="bg-white dark:bg-slate-900 border-[1px] dark:border-white border-black-200">
@@ -26,13 +27,14 @@ export default function NavbarAuth() {
                     <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                         <div className="relative flex h-16 items-center justify-between">
                             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                                <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                                    <span className="absolute -inset-0.5" />
+                                <Disclosure.Button
+                                    className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                                    <span className="absolute -inset-0.5"/>
                                     <span className="sr-only">Open main menu</span>
                                     {open ? (
-                                        <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                                        <XMarkIcon className="block h-6 w-6" aria-hidden="true"/>
                                     ) : (
-                                        <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                                        <Bars3Icon className="block h-6 w-6" aria-hidden="true"/>
                                     )}
                                 </Disclosure.Button>
                             </div>
@@ -45,7 +47,7 @@ export default function NavbarAuth() {
                                         {navigation.map((item) => (
                                             <NavLink
                                                 key={item.name}
-                                                className={({ isActive }) =>
+                                                className={({isActive}) =>
                                                     isActive ? "text-[#FB5757] font-bold" : "text-gray-500"
                                                 }
                                                 to={item.href}
@@ -56,12 +58,13 @@ export default function NavbarAuth() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="ml-20 flex gap-2 items-center bg-white dark:bg-slate-900">
+                            <p className={"dark:text-white ml-5"}>{username}</p>
+                            <div className="ml-5 flex gap-2 items-center bg-white dark:bg-slate-900">
                                 <button title={"Déconnexion"}
                                         className="text-sm bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 p-2  text-[#FB5757]"
                                         onClick={logoutUser}
                                 >
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"  viewBox="0 0 24 24">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                                         <path fill="none" stroke="#FB5757" strokeLinecap="round"
                                               strokeLinejoin="round" strokeWidth="2"
                                               d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4m7 14l5-5l-5-5m5 5H9"/>

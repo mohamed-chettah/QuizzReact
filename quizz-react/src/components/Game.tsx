@@ -86,7 +86,6 @@ function Game() {
         };
     }, [socket, id, sendEvent]);
 
-
     // Quand gameData change, on met à jour les joueurs
     useEffect(() => {
         if (!gameData) return;
@@ -304,9 +303,11 @@ function Game() {
             if(currentQuestionIndex === questions.length && !partyIsFinish){
                 return;
             }
+            setPlayerAnswered(true);
             setTimeout(() => {
                 setCurrentQuestionIndex(currentQuestionIndex + 1);
-            }, 1000)
+                setPlayerAnswered(false);
+            }, 1500)
         })
 
         subscribeToEvent("next_question", finishQuestion);
@@ -415,8 +416,8 @@ function Game() {
 
 
                                 {questions.length == currentQuestionIndex ? (
-                                    <p>
-                                        Question Bonus !
+                                    <p className={"text-xl text-[#FB5757] font-bold"}>
+                                        Question Bonus ! (X2 points)
                                     </p>
                                     )
                                     :
