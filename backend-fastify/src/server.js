@@ -255,13 +255,23 @@ app.io.on("connection", (socket) => {
 	};
 
 	socket.on("submit_answer", async (data) => {
-		const { gameId, playerId, question ,answer, timer, isPlayer1, isLastQuestion} = data;
+		const { gameId, playerId, question ,answer, timer, isPlayer1, isLastQuestion, indexQuestion} = data;
 
-		// Vérifier si la réponse est correcte
-		const correct = answer === question.bonne_reponse;
+		let score = 0;
+		let correct = false;
 
-		// Calculer le score
-		const score = calculateScore(timer, correct, isLastQuestion);
+		if (answer === null) {
+			score = 0;
+		}
+		else
+		{
+			// Vérifier si la réponse est correcte
+			correct = answer === question.bonne_reponse;
+
+			// Calculer le score
+			score = calculateScore(timer, correct, isLastQuestion);
+
+		}
 
 		// Si la manche existe déjà, on la met à jour sinon on la créé
 		let manche = await getMancheByGameIdAndQuestionId(gameId, question.id)
@@ -277,8 +287,15 @@ app.io.on("connection", (socket) => {
 			}
 			manche.save();
 
+			console.log()
 			// On prévient l'autre joueur que tout le monde à répondu donc on passe à la question suivante
-			app.io.to(gameId).emit("next_question");
+			if(indexQuestion === 7){
+				app.io.to(gameId).emit("finish_game");
+			}
+			else {
+				app.io.to(gameId).emit("next_question");
+			}
+
 		}
 		else {
 			if(isPlayer1){
@@ -312,7 +329,7 @@ app.io.on("connection", (socket) => {
 
 	});
 
-	socket.on("end_game", async (gameId) => {
+	socket.on("get_end_game", async (gameId) => {
 		const game = await getGamewithPlayers({params: {gameId}}).then(r => {
 			return r;
 		});

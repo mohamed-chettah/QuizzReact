@@ -71,7 +71,6 @@ function Game() {
     // @ts-ignore
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-
     useEffect(() => {
         if (!socket || !id) return;
 
@@ -127,7 +126,6 @@ function Game() {
 
     }, [gameData]); // ✅ Ce useEffect met à jour player1 et player2 quand gameData change
 
-
     function launchTimer() {
         if (timerRef.current) clearInterval(timerRef.current); // Nettoie le timer précédent
 
@@ -153,6 +151,7 @@ function Game() {
         subscribeToEvent("game_state", handleGameState);
 
         subscribeToEvent("questions_party", (data) => {
+            console.log("questions", data);
             setQuestions(data);
         });
 
@@ -192,9 +191,27 @@ function Game() {
             answer: selectedAnswer,
             timer: timer,
             isPlayer1: player1.id === localStorage.getItem("id"),
-            isLastQuestion: currentQuestionIndex === questions.length - 1
+            isLastQuestion: currentQuestionIndex === questions.length - 1,
+            indexQuestion: currentQuestionIndex
         });
     };
+
+    useEffect(() => {
+        if (timer === 0 && !playerAnswered) {
+            sendEvent("submit_answer", {
+                playerId: localStorage.getItem("id"),
+                gameId: id,
+                question: questions[currentQuestionIndex - 1],
+                answer: null, // Le joueur n'a pas répondu
+                timer: 0,
+                isPlayer1: player1.id === localStorage.getItem("id"),
+                isLastQuestion: currentQuestionIndex === questions.length - 1,
+                indexQuestion: currentQuestionIndex
+            });
+
+            setPlayerAnswered(true); // Empêche le joueur de répondre après la fin du timer
+        }
+    }, [timer, playerAnswered]);
 
     const setColorScore = (
         colorPlayer1: boolean,
@@ -265,63 +282,9 @@ function Game() {
             unsubscribeFromEvent("player_score_result", handlePlayerScoreResult);
         };
     }, [socket, subscribeToEvent, unsubscribeFromEvent, player1.id]);
-    //
-    // // Mettre un watcher pour sur timer lorsqu'il est a zero
-    // useEffect(() => {
-    //     const displayResultParty = (data: any) => {
-    //         setPartyIsFinish(true);
-    //
-    //         if(data){
-    //             if (data.winner === player1.id) {
-    //                 setColorScore(true, false, false);
-    //             } else {
-    //                 setColorScore(false, true, false);
-    //             }
-    //         }
-    //     }
-    //
-    //     if (currentQuestionIndex < questions.length) {
-    //         if (timer === 0) {
-    //
-    //
-    //
-    //             setpanelWaiter(true);
-    //             setColorScore(false, false, false, false, true)
-    //             setTimeout(() => {
-    //                 setpanelWaiter(false);
-    //                 setPlayerAnswered(false);
-    //
-    //                 const interval = launchTimer();
-    //
-    //                 return () => {
-    //                     clearInterval(interval); // Nettoie le timer précédent avant d'en lancer un nouveau
-    //                 };
-    //             }, 2000);
-    //         }
-    //     }
-    //     else if(questions.length > 0 && timer === 0) {
-    //         sendEvent("end_game", id)
-    //         subscribeToEvent("game_end", displayResultParty);
-    //     }
-    //
-    //     return () => {
-    //         unsubscribeFromEvent("game_end", displayResultParty);
-    //     };
-    // }, [timer]);
 
     useEffect(() => {
-        const displayResultParty = (data: any) => {
-                    setPartyIsFinish(true);
-
-                    if(data){
-                        if (data.winner === player1.id) {
-                            setColorScore(true, false, false);
-                        } else {
-                            setColorScore(false, true, false);
-                        }
-                    }
-                }
-        if (currentQuestionIndex < questions.length) {
+        if (currentQuestionIndex <= questions.length) {
             setPanelWaiter(true);
             setColorScore(false, false, false, false, true)
             setTimeout(() => {
@@ -329,22 +292,20 @@ function Game() {
                 setPlayerAnswered(false);
                 launchTimer();
             }, 2000);
-        } else if (questions.length > 0 && timer === 0) {
-            sendEvent("end_game", id);
-            subscribeToEvent("game_end", displayResultParty);
         }
-            return () => {
-                unsubscribeFromEvent("game_end", displayResultParty);
-            };
 
     }, [currentQuestionIndex]);
-    
+
+
     // Next question lorsque les 2 ont repondu
     useEffect(() => {
 
         const finishQuestion = (() => {
+            if(currentQuestionIndex === questions.length && !partyIsFinish){
+                return;
+            }
             setTimeout(() => {
-                setCurrentQuestionIndex((prev) => prev + 1);
+                setCurrentQuestionIndex(currentQuestionIndex + 1);
             }, 1000)
         })
 
@@ -352,6 +313,33 @@ function Game() {
 
         return () => {
             unsubscribeFromEvent("next_question", finishQuestion);
+        };
+    });
+
+    function endGame(){
+        const displayResultParty = (data: any) => {
+            setPartyIsFinish(true);
+
+            if(data){
+                if (data.winner === player1.id) {
+                    setColorScore(true, false, false);
+                } else {
+                    setColorScore(false, true, false);
+                }
+            }
+        }
+        sendEvent("get_end_game", id);
+        subscribeToEvent("game_end", displayResultParty);
+        return () => {
+            unsubscribeFromEvent("game_end", displayResultParty);
+        };
+    }
+
+    // Finish game
+    useEffect(() => {
+        subscribeToEvent("finish_game", endGame);
+        return () => {
+            unsubscribeFromEvent("finish_game", endGame);
         };
     });
 
@@ -439,7 +427,7 @@ function Game() {
 
 
                                 <p className={"text-2xl text-white"}>
-                                    Round { currentQuestionIndex + 1 } sur { questions.length }
+                                    Round { currentQuestionIndex } sur { questions.length }
                                 </p>
                             </div>
                         ) : (
