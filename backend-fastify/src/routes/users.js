@@ -97,31 +97,32 @@ export function usersRoutes(app) {
 		// Créer l'utilisateur (fonction existante)
 		const user = await registerUser(request.body, app.bcrypt);
 
-		if (user) {
-			const confirmationLink = `${process.env.API_URL}/confirm?token=${user.confirmationToken}`;
-
-			const emailHtml = getConfirmationEmailTemplate(user.firstName, confirmationLink);
-
-			const mailOptions = {
-				from: 'quizup.gamesss@gmail.com',
-				to: user.email,
-				subject: 'Confirm your account',
-				html: emailHtml,
-			};
-
-			// Envoyer l'email de confirmation
-			await transporter.sendMail(mailOptions, (error, info) => {
-				if (error) {
-					console.log('Error sending confirmation email:', error);
-					reply.status(500).send({message: 'Error sending confirmation email'});
-				} else {
-					console.log('Confirmation email sent:', info.response);
-					reply.send({message: 'User registered. Please check your email for confirmation.'});
-				}
-			});
-		} else {
-			reply.status(400).send({message: 'User registration failed'});
-		}
+		console.log(user);
+		// if (user) {
+		// 	const confirmationLink = `${process.env.API_URL}/confirm?token=${user.confirmationToken}`;
+		//
+		// 	const emailHtml = getConfirmationEmailTemplate(user.firstname, confirmationLink);
+		//
+		// 	const mailOptions = {
+		// 		from: 'quizup.gamesss@gmail.com',
+		// 		to: user.email,
+		// 		subject: 'Confirm your account',
+		// 		html: emailHtml,
+		// 	};
+		//
+		// 	// Envoyer l'email de confirmation
+		// 	await transporter.sendMail(mailOptions, (error, info) => {
+		// 		if (error) {
+		// 			console.log('Error sending confirmation email:', error);
+		// 			reply.status(500).send({message: 'Error sending confirmation email'});
+		// 		} else {
+		// 			console.log('Confirmation email sent:', info.response);
+		// 			reply.send({message: 'User registered. Please check your email for confirmation.'});
+		// 		}
+		// 	});
+		// } else {
+		// 	reply.status(400).send({message: 'User registration failed'});
+		// }
 	});
 
 	app.get("/confirm", async (request, reply) => {
