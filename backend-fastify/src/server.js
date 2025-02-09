@@ -47,47 +47,12 @@ await app
 	.register(cors, {
 		origin: [process.env.FRONTEND_URL],
 	})
-	.register(fastifySwagger, {
-		openapi: {
-			openapi: "3.0.0",
-			info: {
-				title: "Documentation de l'API JDR LOTR",
-				description:
-					"API développée pour un exercice avec React avec Fastify et Sequelize",
-				version: "0.1.0",
-			},
-		},
-	})
-	.register(fastifySwaggerUi, {
-		routePrefix: "/documentation",
-		theme: {
-			title: "Docs - JDR LOTR API",
-		},
-		uiConfig: {
-			docExpansion: "list",
-			deepLinking: false,
-		},
-		uiHooks: {
-			onRequest: function (request, reply, next) {
-				next();
-			},
-			preHandler: function (request, reply, next) {
-				next();
-			},
-		},
-		staticCSP: true,
-		transformStaticCSP: (header) => header,
-		transformSpecification: (swaggerObject, request, reply) => {
-			return swaggerObject;
-		},
-		transformSpecificationClone: true,
-	})
 	.register(fastifyJWT, {
 		secret: "unanneaupourlesgouvernertous",
 	})
 	.register(socketioServer, {
 		cors: {
-			origin: "*",
+			origin: [process.env.FRONTEND_URL],
 			credentials: true,
 		},
 	});
