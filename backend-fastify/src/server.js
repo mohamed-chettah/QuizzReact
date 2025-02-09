@@ -136,7 +136,7 @@ const start = async () => {
 				);
 			});
 
-		await app.listen({ port: 3000 });
+		await app.listen({ port: parseInt(process.env.PORT)  });
 		console.log(
 			"Serveur Fastify lancé sur " + chalk.blue("http://localhost:3000")
 		);

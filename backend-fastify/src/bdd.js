@@ -8,7 +8,7 @@ dotenv.config();
  * Connexion à la base de données
  */
 export const sequelize = new Sequelize({
-	dialect: MySqlDialect,
+	dialect: "mysql",
 	database: process.env.DB_NAME || "database_name",
 	user: process.env.DB_USER || "root",
 	password: process.env.DB_PASSWORD || "",
