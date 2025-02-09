@@ -69,8 +69,7 @@ const getConfirmationEmailTemplate = (firstName, confirmationLink) => {
 };
 
 const transporter = nodemailer.createTransport({
-	host: process.env.MAIL_HOST,
-	port: 587,
+	service : 'gmail',
 	auth: {
 		user: process.env.MAIL_USER,
 		pass: process.env.MAIL_PASSWORD,

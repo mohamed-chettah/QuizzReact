@@ -33,7 +33,7 @@ export default function Register() {
             // Appel à la fonction d'enregistrement depuis le contexte
             await registerUser(data);
             setError(null)
-            alert("Inscription réussie")
+            alert("Inscription réussie : Un email de confirmation vous a été envoyé.")
             navigate('/login'); // Redirection vers la page d'accueil après inscription
         } catch (err : unknown) {
             if (err instanceof Error) {
