@@ -66,7 +66,7 @@ export default function Login() {
                         </div>
                         <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Connexion</h2>
                         <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
-                            Pour jouer au meilleur jeu de quiz, veuillez vous connecter.
+                            Pour jouer au meilleur jeu de quizz en ligne, veuillez vous connecter.
                         </p>
                     </div>
                 </div>

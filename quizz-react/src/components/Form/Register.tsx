@@ -75,7 +75,7 @@ export default function Register() {
                             </div>
                         <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Inscription</h2>
                         <p className="mt-4 text-lg text-gray-500">
-                            Remplissez le formulaire à droite pour pouvoir jouer à nos jeux.
+                            Remplissez le formulaire à droite pour pouvoir vous inscrir au meilleur jeu de quizz en ligne.
                         </p>
                     </div>
                 </div>
