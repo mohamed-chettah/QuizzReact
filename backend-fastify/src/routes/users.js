@@ -69,11 +69,11 @@ const getConfirmationEmailTemplate = (firstName, confirmationLink) => {
 };
 
 const transporter = nodemailer.createTransport({
-	host: 'smtp.ethereal.email',
+	host: process.env.MAIL_HOST,
 	port: 587,
 	auth: {
-		user: 'nickolas.schoen@ethereal.email',
-		pass: 'pUjduq1QSK7CbEerSc'
+		user: process.env.MAIL_USER,
+		pass: process.env.MAIL_PASSWORD,
 	}
 });
 
