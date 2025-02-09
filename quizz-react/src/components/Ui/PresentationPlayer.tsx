@@ -12,7 +12,7 @@ function PlayerCircle(props: { player1: Player; player2: Player }) {
     const actualPlayerIsPlayer1 = localStorage.getItem("id") === props.player1.id;
 
     return (
-        <div className={`flex flex-col text-white gap-4 ${actualPlayerIsPlayer1 ? "flex-col" : "flex-col-reverse"}`}>
+        <div className={`w-full flex flex-col text-white gap-4 ${actualPlayerIsPlayer1 ? "flex-col" : "flex-col-reverse"}`}>
 
             {/* Bloc du joueur 1 */}
             <motion.div

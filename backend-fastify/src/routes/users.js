@@ -69,13 +69,12 @@ const getConfirmationEmailTemplate = (firstName, confirmationLink) => {
 };
 
 const transporter = nodemailer.createTransport({
-	host: "smtp.zoho.com", // Serveur SMTP de Zoho
-	port: 465, // Utiliser 465 pour SSL, 587 pour TLS
-	secure: true, // true pour SSL, false pour TLS
+	host: 'smtp.ethereal.email',
+	port: 587,
 	auth: {
-		user: 'contact@mc-studio.eu',
-		pass: 'CTup 0Wm0 nF4W',
-	},
+		user: 'nickolas.schoen@ethereal.email',
+		pass: 'pUjduq1QSK7CbEerSc'
+	}
 });
 
 export function usersRoutes(app) {

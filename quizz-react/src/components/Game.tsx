@@ -297,7 +297,7 @@ function Game() {
 
             {/* Affichage des joueurs avant de commencer */}
             {displayPlayers ? (
-                <div>
+                <div className={"w-full"}>
                     <PresentationPlayer player1={player1} player2={player2}/>
                 </div>
             ) : (
