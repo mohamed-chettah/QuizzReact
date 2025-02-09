@@ -3,7 +3,7 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {useAuth} from "../../context/AuthContext.tsx";
 import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 
 // Schéma de validation avec Yup pour login/password au lieu de email
 const schema = yup.object().shape({
@@ -119,9 +119,9 @@ export default function Login() {
                             </button>
                             <p className="text-sm text-center text-gray-600 dark:text-gray-400">
                                 Pas encore de compte ?{' '}
-                                <a href="/register" className="font-semibold text-[#FB5757] ">
+                                <NavLink to="/register" className="font-semibold text-[#FB5757] ">
                                     S'inscrire
-                                </a>
+                                </NavLink>
                             </p>
                         </div>
                     </div>

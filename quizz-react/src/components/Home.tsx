@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import {useAuth} from "../context/AuthContext.tsx";
 
 export default function Home() {
@@ -51,12 +52,12 @@ export default function Home() {
                         Rejoignez-nous dès maintenant !
                     </p>
                     <div className="mt-10 flex justify-center items-center gap-x-6">
-                        <a
-                            href={auth.isAuthenticated ? "/dashboard" : "/login"}
+                        <NavLink
+                            to={auth.isAuthenticated ? "/dashboard" : "/login"}
                             className="rounded-md px-3.5 py-2.5 text-sm font-semibold shadow-sm bg-[#FB5757] text-white hover:bg-[#FB5757]/80 "
                         >
                             Jouer maintenant
-                        </a>
+                        </NavLink>
                     </div>
                 </div>
                 <div
