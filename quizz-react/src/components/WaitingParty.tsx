@@ -11,7 +11,7 @@ function WaitingParty() {
         throw new Error("SocketContext must be used within a SocketProvider");
     }
 
-    const { socket, subscribeToEvent, unsubscribeFromEvent, sendEvent } = socketContext;
+    const { socket, subscribeToEvent } = socketContext;
     const navigate = useNavigate()
 
     // Si joiningParty on lance la partie sur les deux clients
