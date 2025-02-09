@@ -45,7 +45,7 @@ await app
 		saltWorkFactor: 12,
 	})
 	.register(cors, {
-		origin: "*",
+		origin: [process.env.FRONTEND_URL],
 	})
 	.register(fastifySwagger, {
 		openapi: {
