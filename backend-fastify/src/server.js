@@ -105,11 +105,6 @@ const start = async () => {
 		console.log(
 			"Serveur Fastify lancé"
 		);
-		console.log(
-			chalk.bgYellow(
-				"Accéder à la documentation"
-			)
-		);
 	} catch (err) {
 		console.log(err);
 		process.exit(1);
