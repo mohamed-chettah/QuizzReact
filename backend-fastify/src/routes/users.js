@@ -103,7 +103,7 @@ export function usersRoutes(app) {
 			const emailHtml = getConfirmationEmailTemplate(user.firstName, confirmationLink);
 
 			const mailOptions = {
-				from: 'quizzup@gmail.com',
+				from: 'quizup.gamesss@gmail.com',
 				to: user.email,
 				subject: 'Confirm your account',
 				html: emailHtml,
