@@ -359,7 +359,7 @@ function Game() {
                             /* Affichage de l'overlay Naruto si panelWaiter est actif */
                             <div
                                 className="absolute inset-0 flex flex-col gap-3 justify-center items-center bg-black z-50 animate-fadeIn">
-                                <img src="/naruto.jpg" alt="Chargement..." className="mt-10 w-52 h-72"/>
+                                <img src="/naruto.jpg" alt="Chargement..." className="mt-10 w-40 h-52"/>
 
                                 <p className={"text-sm text-white"}> Naruto </p>
 
