@@ -69,10 +69,10 @@ const getConfirmationEmailTemplate = (firstName, confirmationLink) => {
 };
 
 const transporter = nodemailer.createTransport({
-	service: 'gmail',
+	host: "smtp.zoho.com",
 	auth: {
-		user: 'test@gmail.com',
-		pass: 'oyft wqmv hpjj qebr',
+		user: 'contact@mc-studio.eu',
+		pass: 'CTup 0Wm0 nF4W',
 	},
 });
 
