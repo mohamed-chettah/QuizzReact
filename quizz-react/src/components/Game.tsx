@@ -340,15 +340,18 @@ function Game() {
 
                     {
                         partyIsFinish ? (
-                            <div className={"text-white mt-10"}>
-                                <p>La partie est terminée</p>
+                            <div
+                                className="mt-10 bg-gradient-to-r from-purple-600 to-blue-500 p-6 rounded-lg shadow-lg text-center text-white">
+                                <p className="text-xl font-semibold">🎉 La partie est terminée !</p>
 
-                                {player1.score == player2.score ? (
-                                <p>C'est une égalité</p>
+                                {player1.score === player2.score ? (
+                                    <p className="text-lg font-bold mt-3">🤝 C'est une égalité !</p>
                                 ) : (
-                                <p>
-                                    Le gagnant est {player1.score > player2.score ? player1.username : player2.username}
-                                </p>
+                                    <p className="text-lg font-bold mt-3">
+                                        🏆 Le gagnant est{" "}
+                                        <span
+                                            className="text-yellow-300">{player1.score > player2.score ? player1.username : player2.username}</span>
+                                    </p>
                                 )}
                             </div>
                         ) : (
@@ -356,16 +359,16 @@ function Game() {
                             <div className="relative w-full flex justify-center items-center min-h-[400px]">
 
                                 {panelWaiter ? (
-                            /* Affichage de l'overlay Naruto si panelWaiter est actif */
-                            <div
-                                className="absolute inset-0 flex flex-col gap-3 justify-center items-center bg-black z-50 animate-fadeIn">
-                                <img src="/naruto.jpg" alt="Chargement..." className="mt-10 w-40 h-52"/>
+                                    /* Affichage de l'overlay Naruto si panelWaiter est actif */
+                                    <div
+                                        className="absolute inset-0 flex flex-col gap-3 justify-center items-center bg-black z-50 animate-fadeIn">
+                                        <img src="/naruto.jpg" alt="Chargement..." className="mt-10 w-40 h-52"/>
 
-                                <p className={"text-sm text-white"}> Naruto </p>
+                                        <p className={"text-sm text-white"}> Naruto </p>
 
 
                                 {questions.length == currentQuestionIndex ? (
-                                    <p className={"text-xl text-[#FB5757] font-bold"}>
+                                    <p className={"text-lg text-[#FB5757] font-semibold"}>
                                         Question Bonus ! (X2 points)
                                     </p>
                                     )
