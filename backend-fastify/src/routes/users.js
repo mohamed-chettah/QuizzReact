@@ -71,7 +71,7 @@ const getConfirmationEmailTemplate = (firstName, confirmationLink) => {
 const transporter = nodemailer.createTransport({
 	service: 'gmail',
 	auth: {
-		user: 'mohamedchettah0208@gmail.com',
+		user: 'test@gmail.com',
 		pass: 'oyft wqmv hpjj qebr',
 	},
 });
