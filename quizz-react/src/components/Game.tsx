@@ -69,7 +69,7 @@ function Game() {
     const [partyIsFinish, setPartyIsFinish] = useState(false);
 
     // @ts-ignore
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const timerRef = useRef<NodeJS.Timeout>(null);
 
     useEffect(() => {
         if (!socket || !id) return;
@@ -174,7 +174,7 @@ function Game() {
         setTimeout(() => {
             setDisplayPlayers(false);
             launchTimer()
-        }, 5000);
+        }, 3000);
     }, [socket, id, sendEvent, gameData]);
 
     // ✅ Gestion de la réponse à une question
@@ -210,64 +210,20 @@ function Game() {
 
             setPlayerAnswered(true); // Empêche le joueur de répondre après la fin du timer
         }
-    }, [timer, playerAnswered]);
+    }, [timer]);
 
-    const setColorScore = (
-        colorPlayer1: boolean,
-        colorPlayer2: boolean,
-        isWrongPlayer1: boolean = false,
-        isWrongPlayer2: boolean = false,
-        reset: boolean = false
-    ) => {
-        if (reset) {
-            document.querySelector(".score-player1")?.classList.remove("text-green-500", "text-red-500");
-            document.querySelector(".score-player2")?.classList.remove("text-green-500", "text-red-500");
-        }
-
-        if (isWrongPlayer1) {
-            document.querySelector(".score-player1")?.classList.add("text-red-500");
-        } else if (colorPlayer1) {
-            document.querySelector(".score-player1")?.classList.add("text-green-500");
-        }
-
-        if (isWrongPlayer2) {
-            document.querySelector(".score-player2")?.classList.add("text-red-500");
-        } else if (colorPlayer2) {
-            document.querySelector(".score-player2")?.classList.add("text-green-500");
-        }
-    }
 
     useEffect(() => {
         if (!socket) return;
 
         const handlePlayerScoreResult = (data: any) => {
             if(data){
-                // coloré en vert la bonne réponse
-                if (data.playerId === player1.id && data.correct) {
-                    setColorScore(true, false, false);
-                }
-                else if (data.playerId === player2.id && data.correct) {
-                    setColorScore(false, true, false);
-                }
-
                 if (data.playerId === player1.id) {
                     setPlayer1((prev) => ({
                         ...prev,
                         score: prev.score + data.score
                     }));
-                    if(data.correct){
-                        setColorScore(true, false, false);
-                    }
-                    else {
-                        setColorScore(false, false, true);
-                    }
                 } else {
-                    if(data.correct){
-                        setColorScore(false, true, false);
-                    }
-                    else {
-                        setColorScore(false, false, false, true);
-                    }
                     setPlayer2((prev) => ({
                         ...prev,
                         score: prev.score + data.score
@@ -285,7 +241,6 @@ function Game() {
     useEffect(() => {
         if (currentQuestionIndex <= questions.length) {
             setPanelWaiter(true);
-            setColorScore(false, false, false, false, true)
             setTimeout(() => {
                 setPanelWaiter(false);
                 setPlayerAnswered(false);
@@ -318,16 +273,9 @@ function Game() {
     });
 
     function endGame(){
-        const displayResultParty = (data: any) => {
+        const displayResultParty = (data : {}) => {
             setPartyIsFinish(true);
-
-            if(data){
-                if (data.winner === player1.id) {
-                    setColorScore(true, false, false);
-                } else {
-                    setColorScore(false, true, false);
-                }
-            }
+            console.log(data)
         }
         sendEvent("get_end_game", id);
         subscribeToEvent("game_end", displayResultParty);
@@ -390,23 +338,24 @@ function Game() {
                         />
                     </div>
 
-
-
-
                     {
                         partyIsFinish ? (
                             <div className={"text-white mt-10"}>
                                 <p>La partie est terminée</p>
 
+                                {player1.score == player2.score ? (
+                                <p>C'est une égalité</p>
+                                ) : (
                                 <p>
                                     Le gagnant est {player1.score > player2.score ? player1.username : player2.username}
                                 </p>
+                                )}
                             </div>
                         ) : (
 
-                    <div className="relative w-full flex justify-center items-center min-h-[400px]">
+                            <div className="relative w-full flex justify-center items-center min-h-[400px]">
 
-                        {panelWaiter ? (
+                                {panelWaiter ? (
                             /* Affichage de l'overlay Naruto si panelWaiter est actif */
                             <div
                                 className="absolute inset-0 flex flex-col gap-3 justify-center items-center bg-black z-50 animate-fadeIn">

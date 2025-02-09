@@ -268,6 +268,17 @@ app.io.on("connection", (socket) => {
 
 		}
 
+		function eventNextQuestionOrEndPlayer(){
+			// On prévient l'autre joueur que tout le monde à répondu donc on passe à la question suivante, si derniere on arrête le jeu
+			if(indexQuestion === 7){
+				socket.emit("finish_game");
+			}
+			else {
+				socket.emit("next_question");
+			}
+
+		}
+
 		let score = 0;
 		let correct = false;
 
@@ -287,9 +298,8 @@ app.io.on("connection", (socket) => {
 		let manche = await getMancheByGameIdAndQuestionId(gameId, question.id)
 
 		if(!manche && timer === 0){
-			score = 0;
 			// mettre à jour à zero les deux reponses des joueurs :
-			manche = await createManche(
+			await createManche(
 				{
 					gameId: gameId,
 					questionId: question.id,
@@ -302,7 +312,7 @@ app.io.on("connection", (socket) => {
 				return r
 			})
 
-			eventNextQuestionOrEnd()
+			eventNextQuestionOrEndPlayer()
 			return;
 		}
 
@@ -369,7 +379,8 @@ app.io.on("connection", (socket) => {
 			} else if (player1Score < player2Score) {
 				winner = game.player2Id;
 			} else {
-				winner = "egalite";
+				// En cas d'égalité, on ne déclare pas de vainqueur
+				winner = null;
 			}
 
 			// Mettre à jour la partie en BDD
@@ -384,7 +395,6 @@ app.io.on("connection", (socket) => {
 			});
 		}
 	})
-
 
 	// Gérer la déconnexion
 	socket.on("disconnect", (data) => {
