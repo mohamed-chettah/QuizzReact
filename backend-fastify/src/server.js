@@ -138,11 +138,11 @@ const start = async () => {
 
 		await app.listen({ port: parseInt(process.env.PORT) || 3000, host: '0.0.0.0' });
 		console.log(
-			"Serveur Fastify lancé sur " + chalk.blue("http://localhost:3000")
+			"Serveur Fastify lancé"
 		);
 		console.log(
 			chalk.bgYellow(
-				"Accéder à la documentation sur http://localhost:3000/documentation"
+				"Accéder à la documentation"
 			)
 		);
 	} catch (err) {

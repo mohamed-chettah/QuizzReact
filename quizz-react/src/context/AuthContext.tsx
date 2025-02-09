@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Fonction pour le login
     const login = async (userDatas: ILoginUserInput) => {
         try {
-            const response = await axios.post('http://localhost:3000/login', userDatas );
+            const response = await axios.post(import.meta.env.VITE_API_URL + 'login', userDatas );
 
             if (response.data.error) {
                 throw new Error(response.data.error); // Lever une erreur avec le message du serveur
@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Fonction pour l'enregistrement d'un utilisateur
     const registerUser = async (userDatas: IRegisterUserInput) => {
         try {
-            const response = await axios.post('http://localhost:3000/register', userDatas);
+            const response = await axios.post( import.meta.env.VITE_API_URL + 'register', userDatas);
 
             // Vérifier si la réponse contient une erreur, même si le statut HTTP est 200
             if (response.data.error) {

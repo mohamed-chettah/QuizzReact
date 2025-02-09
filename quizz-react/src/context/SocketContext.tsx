@@ -23,7 +23,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     //TODO pour la prod changer l'url
 
     useEffect(() => {
-        const newSocket = io("http://localhost:3000");
+        const newSocket = io(import.meta.env.VITE_API_URL);
 
         newSocket.on("connect", () => {
             setIsConnected(true);
