@@ -341,7 +341,7 @@ function Game() {
                     {
                         partyIsFinish ? (
                             <div
-                                className="mt-10 bg-gradient-to-r from-purple-600 to-blue-500 p-6 rounded-lg shadow-lg text-center text-white">
+                                className="mt-10 p-6 rounded-lg shadow-lg text-center text-white">
                                 <p className="text-xl font-semibold">🎉 La partie est terminée !</p>
 
                                 {player1.score === player2.score ? (
@@ -356,7 +356,7 @@ function Game() {
                             </div>
                         ) : (
 
-                            <div className="relative w-full flex justify-center items-center min-h-[400px]">
+                            <div className="relative flex justify-center items-center min-h-[400px]">
 
                                 {panelWaiter ? (
                                     /* Affichage de l'overlay Naruto si panelWaiter est actif */
@@ -385,7 +385,7 @@ function Game() {
                             </div>
                         ) : (
                             /* Affichage des questions si panelWaiter est désactivé */
-                            <div className="flex flex-col gap-10 mt-10 w-full max-w-3xl text-center">
+                            <div className="flex flex-col gap-10 mt-10 text-center">
                                 {/* Gestion du chargement des questions */}
                                 {questions.length === 0 || questions.length < currentQuestionIndex ? (
                                     <p className="text-white">Chargement des questions...</p>
