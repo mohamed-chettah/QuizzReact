@@ -386,7 +386,6 @@ app.io.on("connection", (socket) => {
 		}
 	});
 });
-});
 
 
 start()
