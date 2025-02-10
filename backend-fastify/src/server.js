@@ -203,6 +203,12 @@ app.io.on("connection", (socket) => {
 		// Récupérer les questions pour la partie
 		const questions = await getQuestionForParty();
 
+		// on veriefie si la partie existe
+		if (!games[gameId]) {
+			socket.emit("error", { message: "La partie n'existe pas." });
+			return;
+		}
+
 		// Envoyer les questions aux joueurs
 		app.io.to(gameId).emit("questions_party", questions);
 	});
@@ -376,7 +382,7 @@ app.io.on("connection", (socket) => {
 					});
 
 					// Notifier l'autre joueur que la partie est terminée
-					app.io.to(gameId).emit("player_disconnected", {
+					app.io.to(gameId).emit("error", {
 						message: "L'autre joueur s'est déconnecté. La partie est annulée.",
 					});
 
