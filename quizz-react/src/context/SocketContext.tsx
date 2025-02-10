@@ -1,6 +1,5 @@
 import {createContext, useCallback, useContext, useEffect, useMemo, useState} from "react";
 import { io, Socket } from "socket.io-client";
-import {useNavigate} from "react-router-dom";
 
 interface SocketContextType {
     socket: Socket | null;
@@ -20,7 +19,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     const [isConnected, setIsConnected] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const navigate = useNavigate();
+
     //TODO pour la prod changer l'url
 
     useEffect(() => {
@@ -35,12 +34,6 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
             setError(`Erreur de connexion: ${err.message}`);
             setLoading(false);
         });
-
-
-        subscribeToEvent("error", (data: any) => {
-            alert("🔴 Error Event Received:" + data)
-            navigate('/dashboard');
-        })
 
         setSocket(newSocket);
 

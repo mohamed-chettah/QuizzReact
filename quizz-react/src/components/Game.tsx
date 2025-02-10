@@ -1,7 +1,7 @@
 import PlayerCircle from "./Ui/PlayerCircle.tsx";
 import {useContext, useEffect, useRef, useState} from "react";
 import {SocketContext} from "../context/SocketContext.tsx";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import PresentationPlayer from "./Ui/PresentationPlayer.tsx";
 
 export type GameData = {
@@ -67,7 +67,7 @@ function Game() {
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
     const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
     const [partyIsFinish, setPartyIsFinish] = useState(false);
-
+    const navigate = useNavigate();
     // @ts-ignore
     const timerRef = useRef<NodeJS.Timeout>(null);
 
@@ -290,6 +290,17 @@ function Game() {
             unsubscribeFromEvent("finish_game", endGame);
         };
     });
+
+    useEffect(() => {
+        subscribeToEvent("error", (data: any) => {
+            alert("🔴 Error Event Received:" + data)
+            navigate('/dashboard');
+        })
+        return () => {
+            unsubscribeFromEvent("error", () => {});
+        };
+    });
+
 
     return (
         <section className="flex items-center flex-col gap-24 p-4 bg-black pb-10 max-w-xl  pt-20">

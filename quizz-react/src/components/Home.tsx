@@ -5,7 +5,7 @@ export default function Home() {
     const auth = useAuth()
     
     return (
-        <div className="sm:pt-0 pt-10 relative isolate overflow-hidden bg-gray-100 dark:bg-gray-900">
+        <div className="sm:mt-0 mt-7 relative isolate overflow-hidden bg-gray-100 dark:bg-gray-900">
             <svg
                 className="absolute inset-0 -z-10 h-full w-full stroke-white/10 dark:stroke-white/20 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
                 aria-hidden="true"
