@@ -14,54 +14,59 @@ import {Op} from "sequelize";
 const getConfirmationEmailTemplate = (firstName, confirmationLink) => {
 	const mjmlTemplate = `
     <mjml>
-      <mj-body background-color="#f4f4f4">
-        <!-- Header Section -->
-        <mj-section background-color="#ffffff" padding="20px">
+      <mj-head>
+        <mj-preview>Confirmez votre compte maintenant</mj-preview>
+        <mj-style inline="inline">
+          .button:hover {
+            background-color: #e65c5c !important;
+          }
+        </mj-style>
+      </mj-head>
+      <mj-body background-color="#f8f8f8">
+      
+        <!-- En-tête -->
+        <mj-section background-color="#ffffff" padding="20px" border-radius="10px" text-align="center">
           <mj-column width="100%">
-            <mj-text align="center" color="#333333" font-size="24px" font-weight="bold" padding="0">Account Confirmation</mj-text>
-            <mj-divider border-color="#d1d1d1" border-width="1px" padding-top="10px" padding-bottom="10px"></mj-divider>
+            <mj-text align="center" color="#333333" font-size="24px" font-weight="bold" padding="0">
+              Bienvenue chez [[NomEntreprise]] !
+            </mj-text>
+            <mj-divider border-color="#FC7979" border-width="2px" padding-top="10px" padding-bottom="10px"></mj-divider>
           </mj-column>
         </mj-section>
 
-        <!-- Greeting Section -->
-        <mj-section background-color="#ffffff" padding="20px">
+        <!-- Message d'accueil -->
+        <mj-section background-color="#ffffff" padding="20px" border-radius="10px">
           <mj-column width="100%">
-            <mj-text align="left" color="#333333" font-size="18px" padding="0">Hello ${firstName},</mj-text>
+            <mj-text align="left" color="#333333" font-size="18px" padding="0">
+              Bonjour ${firstName},
+            </mj-text>
             <mj-text align="left" color="#555555" font-size="16px" padding-top="10px">
-              Thank you for creating an account with us. Please confirm your account by clicking the button below:
+              Merci de nous avoir rejoints ! Pour finaliser votre inscription, veuillez confirmer votre compte en cliquant sur le bouton ci-dessous :
             </mj-text>
           </mj-column>
         </mj-section>
 
-        <!-- Call to Action Button -->
-        <mj-section background-color="#ffffff" padding="20px">
+        <!-- Bouton de confirmation -->
+        <mj-section background-color="#ffffff" padding="20px" border-radius="10px">
           <mj-column width="100%" vertical-align="middle">
-            <mj-button background-color="#4CAF50" color="#ffffff" font-size="18px" font-weight="bold" border-radius="5px" padding="15px 30px" href="${confirmationLink}">
-              Confirm My Account
+            <mj-button class="button" background-color="#FC7979" color="#ffffff" font-size="18px" font-weight="bold" border-radius="8px" padding="15px 30px" href="${confirmationLink}">
+              Confirmer mon compte
             </mj-button>
           </mj-column>
         </mj-section>
 
-        <!-- Additional Information Section -->
-        <mj-section background-color="#ffffff" padding="20px">
+        <!-- Informations supplémentaires -->
+        <mj-section background-color="#ffffff" padding="20px" border-radius="10px">
           <mj-column width="100%">
-            <mj-text align="left" color="#555555" font-size="14px">
-              If you did not create an account, please ignore this email. This link will expire in 24 hours.
+            <mj-text align="left" color="#777777" font-size="14px">
+              Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet email. Ce lien de confirmation expirera dans 24 heures.
             </mj-text>
           </mj-column>
         </mj-section>
 
-        <!-- Footer Section -->
-        <mj-section background-color="#ffffff" padding="20px">
-          <mj-column width="100%">
-            <mj-divider border-color="#d1d1d1" border-width="1px" padding-top="10px" padding-bottom="10px"></mj-divider>
-            <mj-text align="center" color="#777777" font-size="14px">
-              Best regards,<br />The [[CompanyName]] Team
-            </mj-text>
-          </mj-column>
-        </mj-section>
-      </mj-body>
-    </mjml>
+
+      </mj-body> 
+    </mjml> 
   `;
 
 	const htmlOutput = mjml(mjmlTemplate);
