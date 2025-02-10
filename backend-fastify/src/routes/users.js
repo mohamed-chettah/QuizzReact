@@ -28,7 +28,7 @@ const getConfirmationEmailTemplate = (firstName, confirmationLink) => {
         <mj-section background-color="#ffffff" padding="20px" border-radius="10px" text-align="center">
           <mj-column width="100%">
             <mj-text align="center" color="#333333" font-size="24px" font-weight="bold" padding="0">
-              Bienvenue chez [[NomEntreprise]] !
+              Bienvenue chez Quizup !
             </mj-text>
             <mj-divider border-color="#FC7979" border-width="2px" padding-top="10px" padding-bottom="10px"></mj-divider>
           </mj-column>
@@ -37,7 +37,7 @@ const getConfirmationEmailTemplate = (firstName, confirmationLink) => {
         <!-- Message d'accueil -->
         <mj-section background-color="#ffffff" padding="20px" border-radius="10px">
           <mj-column width="100%">
-            <mj-text align="left" color="#333333" font-size="18px" padding="0">
+            <mj-text align="center" color="#333333" font-size="18px" padding="0">
               Bonjour ${firstName},
             </mj-text>
             <mj-text align="left" color="#555555" font-size="16px" padding-top="10px">
