@@ -303,7 +303,7 @@ function Game() {
                 <div>
 
                     {/* Affichage des joueurs et du timer */}
-                    <div className="flex justify-center sm:gap-20 gap-5">
+                    <div className="flex justify-center sm:gap-20 gap-3">
                         <PlayerCircle
                             player={{
                                 name: player1.username,
@@ -317,7 +317,7 @@ function Game() {
                         {
                             !partyIsFinish && !panelWaiter ? (
                             <div className="text-blue-400 flex flex-col gap-1 text-center">
-                                <p className="text-[10px]">TEMP RESTANT</p>
+                                <p className="sm:text-[10px] text-[8px]">TEMP RESTANT</p>
                                 <p className="font-bold">{timer}</p>
                             </div>
                                 ) :

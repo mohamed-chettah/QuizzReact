@@ -357,12 +357,35 @@ app.io.on("connection", (socket) => {
 		}
 	})
 
-	// Gérer la déconnexion
-	socket.on("disconnect", (data) => {
-		console.log("déconnexion", data);
-		// TODO préveneir la room que le joueur s'est déconnecté et mettre à jour la partie (mettre fin)
-		// Optionnel : Gérer la logique pour retirer un joueur déconnecté d'une partie en cours
+	// Gérer la déconnexion d'un joueur
+	socket.on("disconnect", async () => {
+		console.log(`🚨 Déconnexion du joueur : ${socket.id}`);
+
+		// Vérifier si le joueur faisait partie d'une game
+		for (const gameId in games) {
+			if (games.hasOwnProperty(gameId)) {
+				const game = games[gameId];
+
+				if (game.player1 === socket.id || game.player2 === socket.id) {
+					console.log(`🚨 Le joueur était dans la partie ${gameId}, mise à jour en 'finished'`);
+
+					// Mettre à jour la partie en base de données
+					await updateGame({
+						params: { action: "finish", gameId },
+						body: { state: "finished" },
+					});
+
+					// Notifier l'autre joueur que la partie est terminée
+					app.io.to(gameId).emit("player_disconnected", {
+						message: "L'autre joueur s'est déconnecté. La partie est annulée.",
+					});
+
+					delete games[gameId]; // Supprime la partie du cache temporaire
+				}
+			}
+		}
 	});
+});
 });
 
 
