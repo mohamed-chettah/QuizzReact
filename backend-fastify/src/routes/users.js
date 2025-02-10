@@ -157,14 +157,4 @@ export function usersRoutes(app) {
 	});
 
 
-	//récupération de la liste des utilisateurs
-	app.get("/users", async (request, reply) => {
-		reply.send(await getUsers());
-	});
-
-	//récupération d'un utilisateur par son id
-	app.get("/users/:id", async (request, reply) => {
-		reply.send(await getUserById(request.params.id));
-	});
-
 }
