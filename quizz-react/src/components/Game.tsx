@@ -150,7 +150,6 @@ function Game() {
         subscribeToEvent("game_state", handleGameState);
 
         subscribeToEvent("questions_party", (data) => {
-            console.log("questions", data);
             setQuestions(data);
         });
 
@@ -293,7 +292,7 @@ function Game() {
     });
 
     return (
-        <section className="flex items-center flex-col gap-24 p-4 bg-black py-10 max-w-xl sm:pt-0 pt-10">
+        <section className="flex items-center flex-col gap-24 p-4 bg-black pb-10 max-w-xl  pt-20">
 
             {/* Affichage des joueurs avant de commencer */}
             {displayPlayers ? (
