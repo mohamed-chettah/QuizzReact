@@ -189,7 +189,7 @@ function Game() {
             answer: selectedAnswer,
             timer: timer,
             isPlayer1: player1.id === localStorage.getItem("id"),
-            isLastQuestion: currentQuestionIndex === questions.length - 1,
+            isLastQuestion: currentQuestionIndex === 7,
             indexQuestion: currentQuestionIndex
         });
     };
@@ -203,7 +203,7 @@ function Game() {
                 answer: null, // Le joueur n'a pas répondu
                 timer: 0,
                 isPlayer1: player1.id === localStorage.getItem("id"),
-                isLastQuestion: currentQuestionIndex === questions.length - 1,
+                isLastQuestion: 7,
                 indexQuestion: currentQuestionIndex
             });
 
