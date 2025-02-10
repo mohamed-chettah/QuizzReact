@@ -32,7 +32,10 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  @apply dark:bg-slate-900 bg-white;
 }
+
+
 
 h1 {
   font-size: 3.2em;

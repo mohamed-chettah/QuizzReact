@@ -12,7 +12,7 @@ const navigation = [
 
 export default function NavbarGuest() {
     return (
-        <Disclosure as="nav" className="bg-white dark:bg-slate-900 border-[1px] dark:border-white border-black">
+        <Disclosure as="nav" className="bg-white dark:bg-slate-900 border-[1px] dark:border-white">
             {({ open }) => (
                 <>
                     <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
