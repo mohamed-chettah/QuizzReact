@@ -293,7 +293,7 @@ function Game() {
     });
 
     return (
-        <section className="flex items-center flex-col gap-24 p-4 bg-black py-10 max-w-xl">
+        <section className="flex items-center flex-col gap-24 p-4 bg-black py-10 max-w-xl sm:pt-0 pt-10">
 
             {/* Affichage des joueurs avant de commencer */}
             {displayPlayers ? (
@@ -304,7 +304,7 @@ function Game() {
                 <div>
 
                     {/* Affichage des joueurs et du timer */}
-                    <div className="flex justify-center gap-20">
+                    <div className="flex justify-center sm:gap-20 gap-5">
                         <PlayerCircle
                             player={{
                                 name: player1.username,
