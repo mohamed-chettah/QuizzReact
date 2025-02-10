@@ -40,6 +40,7 @@ let blacklistedTokens = [];
 const app = fastify();
 
 // Ajout du plugin fastify-bcrypt pour le hash du mdp
+
 await app
 	.register(fastifyBcrypt, {
 		saltWorkFactor: 12,

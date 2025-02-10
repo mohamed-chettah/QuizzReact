@@ -58,7 +58,7 @@ export default function NavbarAuth() {
                                     </div>
                                 </div>
                             </div>
-                            <p className={"dark:text-white ml-5 font-semibold"}>{username}</p>
+                            <p className={"dark:text-white ml-5 font-semibold first-letter:uppercase"}>{username}</p>
                             <div className="ml-5 flex gap-2 items-center bg-white dark:bg-slate-900">
                                 <button title={"Déconnexion"}
                                         className="text-sm bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 p-2  text-[#FB5757]"
@@ -81,7 +81,7 @@ export default function NavbarAuth() {
                                 <NavLink
                                     key={item.name}
                                     className={({ isActive }) =>
-                                        isActive ? "bg-gray-900 dark:text-white text-black" : "dark:text-white text-black hover:bg-gray-700 hover:text-white',\n" +
+                                        isActive ? "dark:text-[#FB5757] text-[#FB5757]" : "dark:text-white text-black hover:bg-gray-700 hover:text-white',\n" +
                                             "                                        'block rounded-md px-3 py-2 text-base font-medium"
                                     }
                                     to={item.href}
