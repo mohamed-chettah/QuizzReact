@@ -5,7 +5,7 @@ export default function Home() {
     const auth = useAuth()
     
     return (
-        <div className="relative isolate overflow-hidden bg-gray-100 dark:bg-gray-900">
+        <div className="sm:mt-0 mt-10 relative isolate overflow-hidden bg-gray-100 dark:bg-gray-900">
             <svg
                 className="absolute inset-0 -z-10 h-full w-full stroke-white/10 dark:stroke-white/20 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
                 aria-hidden="true"
@@ -66,7 +66,7 @@ export default function Home() {
                         <img
                             src="/screen.png"
                             alt="QuizzUp Interface"
-                            className="w-[32rem] rounded-md shadow-2xl ring-1 bg-gray-200 ring-gray-300 dark:bg-white/5 dark:ring-white/10"
+                            className="sm:w-[32rem] w-[20rem] rounded-md shadow-2xl ring-1 bg-gray-200 ring-gray-300 dark:bg-white/5 dark:ring-white/10"
                         />
                     </div>
                 </div>

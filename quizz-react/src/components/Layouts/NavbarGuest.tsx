@@ -60,7 +60,7 @@ export default function NavbarGuest() {
                                 <NavLink
                                     key={item.name}
                                     className={({ isActive }) =>
-                                        isActive ? "bg-gray-900 dark:text-white text-black" : "dark:text-white text-black hover:bg-gray-700 hover:text-white',\n" +
+                                        isActive ? "text-[#FB5757] font-bold" : "dark:text-white text-black hover:text-[#FB5757]',\n" +
                                             "                                        'block rounded-md px-3 py-2 text-base font-medium"
                                     }
                                     to={item.href}

@@ -80,7 +80,7 @@ export function usersRoutes(app) {
 	app.post("/login", async (request, reply) => {
 		reply.send(await loginUser(request.body, app));
 	}).post(
-		"/logout",
+		"/lo-gout",
 		{preHandler: [app.authenticate]},
 		async (request, reply) => {
 			const token = request.headers["authorization"].split(" ")[1]; // Récupérer le token depuis l'en-tête Authorization

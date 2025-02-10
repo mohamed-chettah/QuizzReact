@@ -64,10 +64,10 @@ export default function Dashboard() {
     return (
         <div className={"mt-10"}>
             <h1 className={"text-black dark:text-white font-semibold"}>Naruto</h1>
-            <p className={"mt-5 xl:text-sm text-xs text-center text-black dark:text-white"}>Testez vos connaissances sur les personnages, les techniques et les batailles <br /> légendaires du monde des ninjas créé par Masashi Kishimoto !</p>
+            <p className={"mt-5 xl:text-sm text-xs text-center text-black dark:text-white mx-auto sm:px-0 px-2"}>Testez vos connaissances sur les personnages, les techniques et les batailles <br /> légendaires du monde des ninjas créé par Masashi Kishimoto !</p>
 
-            <div className={"p-5 mt-5"}>
-                <div className={"flex flex-col gap-10 dark:text-white text-black px-20"}>
+            <div className={"sm:p-5 p-2 mt-5"}>
+                <div className={"flex flex-col gap-10 dark:text-white text-black sm:px-20 px-4"}>
 
                     <div className={"flex md:flex-row flex-col md:items-start items-center justify-center gap-5"}>
                         <img className="rounded-lg w-[250px] object-cover" src="/naruto.jpg" alt='naruto'/>

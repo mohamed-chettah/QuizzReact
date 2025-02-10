@@ -23,8 +23,8 @@ export default function NavbarAuth() {
         <Disclosure as="nav" className="bg-white dark:bg-slate-900 border-[1px] dark:border-white border-black-200">
                 <>
                     <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-                        <div className="relative flex h-16 items-center">
-                            <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                        <div className="relative flex sm:h-16 h-[115px] sm:flex-row flex-col gap-2 items-center z-96">
+                            <div className="flex flex-1 sm:flex-row flex-col gap-2 items-center justify-center sm:items-stretch sm:justify-start">
                                 <div className="flex flex-shrink-0 items-center">
                                     <img src="/big-logo.png" className={"w-20"}/>
                                 </div>
