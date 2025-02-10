@@ -69,8 +69,8 @@ export default function Dashboard() {
             <div className={"p-5 mt-5"}>
                 <div className={"flex flex-col gap-10 dark:text-white text-black px-20"}>
 
-                    <div className={"flex justify-center gap-5"}>
-                        <img className="rounded-lg xl:w-[250px] w-[150px] object-cover" src="/naruto.jpg" alt='naruto'/>
+                    <div className={"flex md:flex-row flex-col md:items-start items-center justify-center gap-5"}>
+                        <img className="rounded-lg w-[250px] object-cover" src="/naruto.jpg" alt='naruto'/>
 
                         <div className={"flex-col flex gap-5"}>
                             <button
@@ -83,8 +83,8 @@ export default function Dashboard() {
                             <p>OU</p>
 
                             <input value={party}
-                                   onChange={(e) => setParty(e.target.value)} placeholder={"id de la partie"}
-                                   className={"focus:border-blue-400 dark:border-white border-[1px]  border-black-400  rounded-lg p-2 text-black"}
+                                   onChange={(e) => setParty(e.target.value)} placeholder={"identifiant de la partie"}
+                                   className={"focus:border-blue-400 dark:border-white border-[1px] border-black-400 rounded-lg p-2 text-black"}
                                    type="text"/>
 
                             <button
@@ -104,23 +104,23 @@ export default function Dashboard() {
 
                     </div>
 
-                    <div className={"flex gap-10 justify-center w-full"}>
+                    <div className={"flex sm:flex-row flex-col sm:gap-10 gap-5 justify-center w-full"}>
                         <div className={"flex flex-col gap-3"}>
-                            <p className={"dark:text-gray-500 text-xs"}>Votre Niveau</p>
+                            <p className={"dark:text-gray-500 text-[10px]"}>VOTRE NIVEAU</p>
                             <p className={"text-3xl dark:text-white text-black"}>999</p>
                         </div>
 
-                        <hr className={"border-black-400 dark:border-white border-black border-[0.5px] h-20"}/>
+                        <hr className={"border-black-400 dark:border-white border-black border-[0.5px] sm:h-20 "}/>
 
                         <div className={"flex flex-col gap-3"}>
-                            <p className={"dark:text-gray-500 text-xs"}>ABONNÉS</p>
+                            <p className={"dark:text-gray-500 text-[10px]"}>ABONNÉS</p>
                             <p className={"text-3xl dark:text-white text-black"}>10000</p>
                         </div>
 
-                        <hr className={"border-black-400 dark:border-white border-black border-[0.5px] h-20"}/>
+                        <hr className={"border-black-400 dark:border-white border-black border-[0.5px] sm:h-20 "}/>
 
                         <div className={"flex flex-col gap-3"}>
-                            <p className={"dark:text-gray-500 text-xs"}>TITRE SUIVANT NIV.</p>
+                            <p className={"dark:text-gray-500 text-[10px]"}>TITRE SUIVANT NIV.</p>
                             <p className={"text-3xl dark:text-white text-black"}>1200</p>
                         </div>
                     </div>

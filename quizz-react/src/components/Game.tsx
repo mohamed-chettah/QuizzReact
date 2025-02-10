@@ -293,7 +293,7 @@ function Game() {
     });
 
     return (
-        <section className="flex items-center flex-col gap-16 p-4 bg-black py-10">
+        <section className="flex items-center flex-col gap-24 p-4 bg-black py-10 max-w-xl">
 
             {/* Affichage des joueurs avant de commencer */}
             {displayPlayers ? (
@@ -361,31 +361,36 @@ function Game() {
                                 {panelWaiter ? (
                                     /* Affichage de l'overlay Naruto si panelWaiter est actif */
                                     <div
-                                        className="absolute inset-0 flex flex-col gap-3 justify-center items-center bg-black z-50 animate-fadeIn">
+                                        className="absolute inset-0 flex flex-col gap-2 justify-center items-center bg-black z-50 animate-fadeIn">
                                         <img src="/naruto.jpg" alt="Chargement..." className="mt-10 w-40 h-52"/>
 
-                                        <p className={"text-sm text-white"}> Naruto </p>
+                                        <p className={"text-sm text-white"}> Guess the answer </p>
+
+                                        <p className={"text-xs text-gray-400"}> Naruto </p>
 
 
-                                {questions.length == currentQuestionIndex ? (
-                                    <p className={"text-lg text-[#FB5757] font-semibold"}>
-                                        Question Bonus ! (X2 points)
-                                    </p>
-                                    )
-                                    :
-                                    (
-                                        <p></p>
-                                    )
-                                }
+                                        {questions.length == currentQuestionIndex ? (
+                                                <p className={"text-md text-[#FB5757] font-semibold"}>
+                                                    Question Bonus ! (Les points sont doublés)
+                                                </p>
+                                            )
+                                            :
+                                            (
+                                                <p></p>
+                                            )
+                                        }
 
+                                        <p className={"text-4xl text-white font-semibold"}>
+                                            ROUND {currentQuestionIndex}
+                                        </p>
 
-                                <p className={"text-2xl text-white"}>
-                                    Round { currentQuestionIndex } sur { questions.length }
-                                </p>
-                            </div>
-                        ) : (
-                            /* Affichage des questions si panelWaiter est désactivé */
-                            <div className="flex flex-col gap-10 mt-10 text-center">
+                                        <p className={"text-xs text-gray-400"}>
+                                            {currentQuestionIndex} sur {questions.length}
+                                        </p>
+                                    </div>
+                                ) : (
+                                    /* Affichage des questions si panelWaiter est désactivé */
+                                    <div className="flex flex-col gap-10 mt-10 text-center">
                                 {/* Gestion du chargement des questions */}
                                 {questions.length === 0 || questions.length < currentQuestionIndex ? (
                                     <p className="text-white">Chargement des questions...</p>
