@@ -10,6 +10,7 @@ import Home from "./components/Home.tsx";
 import Game from "./components/Game.tsx";
 import WaitingParty from "./components/WaitingParty.tsx";
 import {SocketProvider} from "./context/SocketContext.tsx";
+import Ranking from "./components/Ranking.tsx";
 
 function App() {
     const router = createBrowserRouter([
@@ -21,6 +22,7 @@ function App() {
                 { path: "/register", element: <Register /> },
                 { path: "/login", element: <Login /> },
                 { path: "/dashboard", element: <ProtectedRoute component={<Dashboard />} /> },
+                { path: "/ranking", element: <ProtectedRoute component={<Ranking />} /> },
                 { path: "/waiting/:id", element: <ProtectedRoute component={<WaitingParty />} /> },
                 { path: "/game/:id", element: <ProtectedRoute component={<Game />} /> }
             ],

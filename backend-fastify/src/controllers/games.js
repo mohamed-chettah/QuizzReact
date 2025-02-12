@@ -1,5 +1,7 @@
 import Game from "../models/games.js";
 import User from "../models/users.js";
+import {Op} from "sequelize";
+import Manches from "../models/manches.js";
 
 export async function createGame(game) {
 	if (!game.player1) {
@@ -85,6 +87,52 @@ export async function updateGame(request) {
 
 	return await Game.findOne({
 		where: {id: game.id},
+		include: [
+			{
+				model: User, // Assure-toi d'importer ton modèle User
+				as: "player1",
+				attributes: ["id", "username"] // Sélectionne les champs que tu veux récupérer
+			},
+			{
+				model: User,
+				as: "player2",
+				attributes: ["id", "username"]
+			}
+		]
+	});
+
+}
+
+export async function findGamesByUserId(userId) {
+	return await Game.findAll({
+		where: {
+			[Op.or]: [{ player1Id: userId }, { player2Id: userId }],
+		},
+		include: [
+			{
+				model: User, // Assure-toi d'importer ton modèle User
+				as: "player1",
+				attributes: ["id", "username"] // Sélectionne les champs que tu veux récupérer
+			},
+			{
+				model: User,
+				as: "player2",
+				attributes: ["id", "username"]
+			},
+			{
+				model: Manches,
+				as : "manches",
+				attributes: ["id", "gameId", "player1Rep", "player2Rep", "player2Point", "player1Point"],
+			}
+		]
+	});
+}
+
+export async function getRankingGames() {
+	return await Game.findAll({
+		where: {
+			state: "finished",
+		},
 		include: [
 			{
 				model: User, // Assure-toi d'importer ton modèle User

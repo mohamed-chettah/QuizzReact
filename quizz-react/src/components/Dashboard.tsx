@@ -61,6 +61,10 @@ export default function Dashboard() {
         }
     }
 
+    function redirectToRanking() {
+        navigate("/ranking");
+    }
+
     return (
         <div className={"mt-10"}>
             <h1 className={"text-black dark:text-white font-semibold"}>Naruto</h1>
@@ -94,7 +98,7 @@ export default function Dashboard() {
                                 className={"xl:text-md text-sm text-gray-800"}>Rejoindre une partie </p>
                             </button>
 
-                            <button
+                            <button onClick={redirectToRanking}
                                 className={"flex gap-3 justify-center xl:flex-row flex-col dark:border-white border-[1px]  border-black-400  items-center dark:text-black text-white"}>
                                 <TrophyIcon className="text-purple-700 block h-6 w-6" aria-hidden="true"/><p
                                 className={"xl:text-md text-sm text-purple-700"}>Classement</p>
