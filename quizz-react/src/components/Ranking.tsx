@@ -22,6 +22,7 @@ export type Game = {
 
 function Ranking() {
     const [gamesOfUser, setGamesOfUser] = useState<Game[]>([]);
+    const [gamesOfAllUser, setGamesOfAllUser] = useState<Game[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -33,6 +34,8 @@ function Ranking() {
                 }
                 const response = await axios.get(import.meta.env.VITE_API_URL + 'games/' + idUser);
                 setGamesOfUser(response.data);
+                const listAllGame = await axios.get(import.meta.env.VITE_API_URL + 'games');
+                setGamesOfAllUser(listAllGame.data);
             } catch (error) {
                 console.error("Erreur lors du chargement des jeux:", error);
             } finally {
@@ -49,7 +52,43 @@ function Ranking() {
 
     return (
         <div className="ranking-container">
-            <h2 className="ranking-title text-semibold my-5">Récapitulatifs des Parties du joueur connecté</h2>
+
+            <h2 className="ranking-title text-semibold my-5">Récapitulatifs Global de toutes les parties joués et terminés : </h2>
+
+            {gamesOfAllUser.length === 0 ? (
+                <p>Aucune partie n'a été jouée pour le moment.</p>
+            ) : (
+                <table className="ranking-table mt-5">
+                    <thead>
+                    <tr>
+                        <th>Joueur 1</th>
+                        <th>Joueur 2</th>
+                        <th>État</th>
+                        <th>Score Joueur 1</th>
+                        <th>Score Joueur 2</th>
+                        <th>Vainqueur</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {gamesOfAllUser.map((game) => {
+                        const totalPlayer1Points = game.manches.reduce((sum, manche) => sum + (manche.player1Point || 0), 0)
+                        const totalPlayer2Points = game.manches.reduce((sum, manche) => sum + (manche.player2Point || 0), 0);
+                        return (
+                            <tr key={game.id}>
+                                <td>{game.player1?.username || "-"}</td>
+                                <td>{game.player2?.username || "-"}</td>
+                                <td>{game.state}</td>
+                                <td>{totalPlayer1Points}</td>
+                                <td>{totalPlayer2Points}</td>
+                                <td>{game.winner || "Egalité"}</td>
+                            </tr>
+                        )
+                    })}
+                    </tbody>
+                </table>
+            )}
+
+            <h2 className="ranking-title text-semibold my-5">Récapitulatifs des Parties du joueur connecté : </h2>
             <table className="ranking-table mt-5">
                 <thead>
                 <tr>
@@ -72,7 +111,7 @@ function Ranking() {
                             <td>{game.state}</td>
                             <td>{totalPlayer1Points}</td>
                             <td>{totalPlayer2Points}</td>
-                            <td>{game.winner || "-"}</td>
+                            <td>{game.winner || "Egalité"}</td>
                         </tr>
                     );
                 })}

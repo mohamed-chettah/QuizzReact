@@ -107,6 +107,7 @@ export async function findGamesByUserId(userId) {
 	return await Game.findAll({
 		where: {
 			[Op.or]: [{ player1Id: userId }, { player2Id: userId }],
+			state: "finished",
 		},
 		include: [
 			{
@@ -128,7 +129,7 @@ export async function findGamesByUserId(userId) {
 	});
 }
 
-export async function getRankingGames() {
+export async function getAllGamePlayed(){
 	return await Game.findAll({
 		where: {
 			state: "finished",
@@ -143,6 +144,11 @@ export async function getRankingGames() {
 				model: User,
 				as: "player2",
 				attributes: ["id", "username"]
+			},
+			{
+				model: Manches,
+				as : "manches",
+				attributes: ["id", "gameId", "player1Rep", "player2Rep", "player2Point", "player1Point"],
 			}
 		]
 	});
