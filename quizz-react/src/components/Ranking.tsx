@@ -46,16 +46,16 @@ function Ranking() {
     }, []);
 
     if (loading) {
-        return <p className="text-gray-200 text-center">Chargement...</p>;
+        return <p className="text-gray-800 dark:text-gray-200 text-center">Chargement...</p>;
     }
 
     return (
-        <div className="p-6 bg-gray-900 text-white rounded-lg shadow-lg">
+        <div className="p-6 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg shadow-lg">
             <h2 className="text-xl font-semibold mb-5">Récapitulatif Global de toutes les parties jouées et terminées :</h2>
             {gamesOfAllUser.length === 0 ? (
-                <p className="text-gray-400">Aucune partie n'a été jouée pour le moment.</p>
+                <p className="text-gray-600 dark:text-gray-400">Aucune partie n'a été jouée pour le moment.</p>
             ) : (
-                <table className="w-full border border-gray-700 rounded-lg overflow-hidden">
+                <table className="w-full border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden">
                     <thead>
                     <tr className="bg-red-600 text-white">
                         <th className="p-3">Joueur 1</th>
@@ -71,7 +71,7 @@ function Ranking() {
                         const totalPlayer1Points = game.manches.reduce((sum, manche) => sum + (manche.player1Point || 0), 0);
                         const totalPlayer2Points = game.manches.reduce((sum, manche) => sum + (manche.player2Point || 0), 0);
                         return (
-                            <tr key={game.id} className="border-b border-gray-700 bg-gray-800 hover:bg-gray-700">
+                            <tr key={game.id} className="border-b border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700">
                                 <td className="p-3 text-center">{game.player1?.username || "-"}</td>
                                 <td className="p-3 text-center">{game.player2?.username || "-"}</td>
                                 <td className="p-3 text-center">{game.state}</td>
@@ -86,7 +86,7 @@ function Ranking() {
             )}
 
             <h2 className="text-xl font-semibold my-5">Récapitulatif des Parties du joueur connecté :</h2>
-            <table className="w-full border border-gray-700 rounded-lg overflow-hidden">
+            <table className="w-full border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden">
                 <thead>
                 <tr className="bg-red-600 text-white">
                     <th className="p-3">Joueur 1</th>
@@ -102,7 +102,7 @@ function Ranking() {
                     const totalPlayer1Points = game.manches.reduce((sum, manche) => sum + (manche.player1Point || 0), 0);
                     const totalPlayer2Points = game.manches.reduce((sum, manche) => sum + (manche.player2Point || 0), 0);
                     return (
-                        <tr key={game.id} className="border-b border-gray-700 bg-gray-800 hover:bg-gray-700">
+                        <tr key={game.id} className="border-b border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700">
                             <td className="p-3 text-center">{game.player1?.username || "-"}</td>
                             <td className="p-3 text-center">{game.player2?.username || "-"}</td>
                             <td className="p-3 text-center">{game.state}</td>
