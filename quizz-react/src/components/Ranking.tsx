@@ -17,8 +17,7 @@ export type Game = {
         player2Point: number;
     }[];
     winner: string;
-
-}
+};
 
 function Ranking() {
     const [gamesOfUser, setGamesOfUser] = useState<Game[]>([]);
@@ -47,57 +46,55 @@ function Ranking() {
     }, []);
 
     if (loading) {
-        return <p>Chargement...</p>;
+        return <p className="text-gray-200 text-center">Chargement...</p>;
     }
 
     return (
-        <div className="ranking-container">
-
-            <h2 className="ranking-title text-semibold my-5">Récapitulatifs Global de toutes les parties joués et terminés : </h2>
-
+        <div className="p-6 bg-gray-900 text-white rounded-lg shadow-lg">
+            <h2 className="text-xl font-semibold mb-5">Récapitulatif Global de toutes les parties jouées et terminées :</h2>
             {gamesOfAllUser.length === 0 ? (
-                <p>Aucune partie n'a été jouée pour le moment.</p>
+                <p className="text-gray-400">Aucune partie n'a été jouée pour le moment.</p>
             ) : (
-                <table className="ranking-table mt-5">
+                <table className="w-full border border-gray-700 rounded-lg overflow-hidden">
                     <thead>
-                    <tr>
-                        <th>Joueur 1</th>
-                        <th>Joueur 2</th>
-                        <th>État</th>
-                        <th>Score Joueur 1</th>
-                        <th>Score Joueur 2</th>
-                        <th>Vainqueur</th>
+                    <tr className="bg-red-600 text-white">
+                        <th className="p-3">Joueur 1</th>
+                        <th className="p-3">Joueur 2</th>
+                        <th className="p-3">État</th>
+                        <th className="p-3">Score Joueur 1</th>
+                        <th className="p-3">Score Joueur 2</th>
+                        <th className="p-3">Vainqueur</th>
                     </tr>
                     </thead>
                     <tbody>
                     {gamesOfAllUser.map((game) => {
-                        const totalPlayer1Points = game.manches.reduce((sum, manche) => sum + (manche.player1Point || 0), 0)
+                        const totalPlayer1Points = game.manches.reduce((sum, manche) => sum + (manche.player1Point || 0), 0);
                         const totalPlayer2Points = game.manches.reduce((sum, manche) => sum + (manche.player2Point || 0), 0);
                         return (
-                            <tr key={game.id}>
-                                <td>{game.player1?.username || "-"}</td>
-                                <td>{game.player2?.username || "-"}</td>
-                                <td>{game.state}</td>
-                                <td>{totalPlayer1Points}</td>
-                                <td>{totalPlayer2Points}</td>
-                                <td>{game.winner || "Egalité"}</td>
+                            <tr key={game.id} className="border-b border-gray-700 bg-gray-800 hover:bg-gray-700">
+                                <td className="p-3 text-center">{game.player1?.username || "-"}</td>
+                                <td className="p-3 text-center">{game.player2?.username || "-"}</td>
+                                <td className="p-3 text-center">{game.state}</td>
+                                <td className="p-3 text-center">{totalPlayer1Points}</td>
+                                <td className="p-3 text-center">{totalPlayer2Points}</td>
+                                <td className="p-3 text-center">{game.winner || "Égalité"}</td>
                             </tr>
-                        )
+                        );
                     })}
                     </tbody>
                 </table>
             )}
 
-            <h2 className="ranking-title text-semibold my-5">Récapitulatifs des Parties du joueur connecté : </h2>
-            <table className="ranking-table mt-5">
+            <h2 className="text-xl font-semibold my-5">Récapitulatif des Parties du joueur connecté :</h2>
+            <table className="w-full border border-gray-700 rounded-lg overflow-hidden">
                 <thead>
-                <tr>
-                    <th>Joueur 1</th>
-                    <th>Joueur 2</th>
-                    <th>État</th>
-                    <th>Score Joueur 1</th>
-                    <th>Score Joueur 2</th>
-                    <th>Vainqueur</th>
+                <tr className="bg-red-600 text-white">
+                    <th className="p-3">Joueur 1</th>
+                    <th className="p-3">Joueur 2</th>
+                    <th className="p-3">État</th>
+                    <th className="p-3">Score Joueur 1</th>
+                    <th className="p-3">Score Joueur 2</th>
+                    <th className="p-3">Vainqueur</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -105,52 +102,18 @@ function Ranking() {
                     const totalPlayer1Points = game.manches.reduce((sum, manche) => sum + (manche.player1Point || 0), 0);
                     const totalPlayer2Points = game.manches.reduce((sum, manche) => sum + (manche.player2Point || 0), 0);
                     return (
-                        <tr key={game.id}>
-                            <td>{game.player1?.username || "-"}</td>
-                            <td>{game.player2?.username || "-"}</td>
-                            <td>{game.state}</td>
-                            <td>{totalPlayer1Points}</td>
-                            <td>{totalPlayer2Points}</td>
-                            <td>{game.winner || "Egalité"}</td>
+                        <tr key={game.id} className="border-b border-gray-700 bg-gray-800 hover:bg-gray-700">
+                            <td className="p-3 text-center">{game.player1?.username || "-"}</td>
+                            <td className="p-3 text-center">{game.player2?.username || "-"}</td>
+                            <td className="p-3 text-center">{game.state}</td>
+                            <td className="p-3 text-center">{totalPlayer1Points}</td>
+                            <td className="p-3 text-center">{totalPlayer2Points}</td>
+                            <td className="p-3 text-center">{game.winner || "Égalité"}</td>
                         </tr>
                     );
                 })}
                 </tbody>
             </table>
-            <style>{`
-                .ranking-container {
-                    text-align: center;
-                    padding: 20px;
-                    background: #f9f9f9;
-                    border-radius: 10px;
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                }
-                .ranking-title {
-                    font-size: 24px;
-                    margin-bottom: 15px;
-                    color: #333;
-                }
-                .ranking-table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    background: #fff;
-                    border-radius: 8px;
-                    overflow: hidden;
-                }
-                .ranking-table th, .ranking-table td {
-                    border: 1px solid #ddd;
-                    padding: 10px;
-                    text-align: center;
-                }
-                .ranking-table th {
-                    background: #FB5757;
-                    color: #fff;
-                    font-weight: bold;
-                }
-                .ranking-table tr:nth-child(even) {
-                    background: #f2f2f2;
-                }
-            `}</style>
         </div>
     );
 }
